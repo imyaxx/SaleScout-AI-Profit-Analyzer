@@ -189,7 +189,7 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
           </h2>
           <button
             onClick={onNext}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#2563EB] text-white rounded-xl text-sm font-semibold hover:bg-[#1D4ED8] transition-colors shadow-lg shadow-blue-200"
           >
             Перейти к заявке
             <ArrowRight size={16} />
