@@ -152,6 +152,7 @@ const AiProfitAnalyzerPage: React.FC = () => {
                 analysis={analysis}
                 isLoading={analysisLoading}
                 error={analysisError}
+                shopName={shopName}
                 onRetry={runAnalysis}
                 onNext={handleGoLead}
               />

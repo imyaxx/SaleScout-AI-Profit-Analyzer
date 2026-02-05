@@ -29,7 +29,7 @@ const StepInput: React.FC<StepInputProps> = ({ initialUrl, initialShop, onBack, 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    onNext(url.trim(), shop.trim());
+    onNext(url.trim(), shop);
   };
 
   return (

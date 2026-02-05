@@ -19,6 +19,16 @@ dist-ssr
 server/.env
 server/.env.*
 !.env.example
+.envrc
+.npmrc
+
+# Certificates / keys
+*.p12
+*.pfx
+*.cer
+*.crt
+*.der
+*.jks
 
 # Debug artifacts
 server/debug

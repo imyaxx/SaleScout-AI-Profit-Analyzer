@@ -45,6 +45,7 @@
 │  │  ├─ ai-profit
 │  │  └─ onboarding
 │  │     └─ analysis
+│  ├─ hooks
 │  ├─ lib
 │  ├─ pages
 │  └─ types.ts
@@ -56,6 +57,11 @@
       ├─ models
       └─ services
 ```
+**Ключевые зоны**
+- `src/components` — UI и шаги онбординга.
+- `src/hooks` — пользовательские хуки (например, `useThrottledValue`).
+- `src/lib` — бизнес‑логика и подготовка данных для UI.
+- `server/src` — API, интеграция с Kaspi и сохранение лидов.
 
 ## Переменные окружения (Backend)
 Создайте `server/.env`:

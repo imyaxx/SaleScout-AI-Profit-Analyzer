@@ -5,16 +5,19 @@ import { KaspiAnalysis } from '../../types';
 import { LoadingState, ErrorState } from '../ai-profit/States';
 import ProfitChart from './analysis/ProfitChart';
 import FomoBlock from './analysis/FomoBlock';
-import PositionRanking, { PositionItem } from './analysis/PositionRanking';
+import PositionRanking from './analysis/PositionRanking';
 import PriceSimulator from './analysis/PriceSimulator';
 import ConfidenceMeter from './analysis/ConfidenceMeter';
 import AnalysisTimer from './analysis/AnalysisTimer';
 import ErrorBoundary from './analysis/ErrorBoundary';
+import { buildMiniRating, computeSimulatedUser, UserShopBase } from '../../lib/miniSellerRanking';
+import { useThrottledValue } from '../../hooks/useThrottledValue';
 
 interface StepAnalysisProps {
   analysis: KaspiAnalysis | null;
   isLoading: boolean;
   error: string | null;
+  shopName: string;
   onRetry: () => void;
   onNext: () => void;
 }
@@ -32,7 +35,9 @@ const demoAnalysisData: KaspiAnalysis = {
     { name: 'Kaspi Pro', price: 741120 },
     { name: 'Smart Devices', price: 742200 },
     { name: 'Top Seller', price: 742500 },
-    { name: 'Ваш магазин', price: 742883 }
+    { name: 'Fresh Market', price: 742700 },
+    { name: 'Mega Store', price: 742800 },
+    { name: 'ALEM', price: 742883 }
   ]
 };
 
@@ -44,8 +49,16 @@ const toNumber = (value: number | null | undefined, fallback = 0) => {
 const safeString = (value: string | undefined | null, fallback = 'Неизвестный продавец') =>
   String(value ?? fallback);
 
-const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error, onRetry, onNext }) => {
-  const [priceDropPercent, setPriceDropPercent] = useState(0);
+const normalizeShopKey = (value: string | undefined | null) =>
+  String(value ?? '')
+    .toLowerCase()
+    .replace(/["«»'’`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error, shopName, onRetry, onNext }) => {
+  const [rawPriceDropPercent, setRawPriceDropPercent] = useState(0);
+  const smoothPriceDropPercent = useThrottledValue(rawPriceDropPercent, 60);
 
   const viewState = isLoading ? 'loading' : error ? 'error' : analysis ? 'success' : 'idle';
   const effectiveAnalysis = analysis ?? demoAnalysisData;
@@ -54,20 +67,28 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
   const basePrice = toNumber(effectiveAnalysis.myShopPrice ?? leaderPrice, leaderPrice);
   const basePosition = toNumber(effectiveAnalysis.myShopPosition ?? 1, 1);
 
-  const simulatedPrice = Math.max(0, Math.round(basePrice * (1 - priceDropPercent / 100)));
-  const priceToTop1 = simulatedPrice - leaderPrice;
+  const simulationBase: UserShopBase = useMemo(
+    () => ({
+      priceBase: basePrice,
+      rankBase: basePosition
+    }),
+    [basePrice, basePosition]
+  );
 
-  const simulatedPosition = useMemo(() => {
-    const maxGain = Math.min(5, Math.max(basePosition - 1, 0));
-    const improvement = Math.round((priceDropPercent / 5) * maxGain);
-    return Math.max(1, basePosition - improvement);
-  }, [basePosition, priceDropPercent]);
+  const simulatedMetrics = useMemo(
+    () => computeSimulatedUser(simulationBase, smoothPriceDropPercent),
+    [simulationBase, smoothPriceDropPercent]
+  );
+
+  const simulatedPrice = simulatedMetrics?.price ?? basePrice;
+  const simulatedPosition = simulatedMetrics?.rank ?? basePosition;
+  const priceToTop1 = simulatedPrice - leaderPrice;
 
   const chartData = useMemo(() => {
     const days = 31;
     const base = Math.max(basePrice, leaderPrice);
     const baseline = Math.round(base * 0.26);
-    const salescoutBoost = 1.15 + (priceDropPercent / 5) * 0.18;
+    const salescoutBoost = 1.15 + (smoothPriceDropPercent / 5) * 0.18;
 
     const currentSeries = Array.from({ length: days }, (_, day) => {
       const growth = 1 + day * 0.014;
@@ -80,53 +101,69 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
     });
 
     return { currentSeries, optimizedSeries };
-  }, [basePrice, leaderPrice, priceDropPercent]);
+  }, [basePrice, leaderPrice, smoothPriceDropPercent]);
 
   const profitLow = useMemo(() => Math.round(chartData.optimizedSeries[30] * 0.92), [chartData]);
   const profitHigh = useMemo(() => Math.round(chartData.optimizedSeries[30] * 1.12), [chartData]);
   const fomoValue = Math.max(0, chartData.optimizedSeries[7] - chartData.currentSeries[7]);
 
-  const rankingItems = useMemo(() => {
+  const top5Sellers = useMemo(() => {
     const offers = Array.isArray(effectiveAnalysis.offers) ? effectiveAnalysis.offers : [];
     const sorted = offers
-      .map((offer, index) => ({
-        id: `offer-${index}-${offer.name}`,
+      .map((offer) => ({
         name: safeString(offer.name),
         price: toNumber(offer.price, 0)
       }))
+      .filter((offer) => offer.name && offer.price > 0)
       .sort((a, b) => a.price - b.price);
 
-    const userItem: PositionItem = {
-      id: 'my-shop',
-      name: 'Ваш магазин',
-      price: simulatedPrice,
-      isUser: true
+    const seen = new Set<string>();
+    const top: { rank: number; name: string; price: number }[] = [];
+    for (const offer of sorted) {
+      const key = normalizeShopKey(offer.name);
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      top.push({ rank: top.length + 1, name: offer.name, price: offer.price });
+      if (top.length >= 5) break;
+    }
+    return top;
+  }, [effectiveAnalysis.offers]);
+
+  const userShopBase = useMemo(() => {
+    if (!effectiveAnalysis.myShopFound) return null;
+    const rank = effectiveAnalysis.myShopPosition;
+    const price = effectiveAnalysis.myShopPrice;
+    if (!Number.isFinite(Number(rank)) || !Number.isFinite(Number(price))) return null;
+
+    const normalizedTarget = normalizeShopKey(shopName);
+    const offers = Array.isArray(effectiveAnalysis.offers) ? effectiveAnalysis.offers : [];
+    const matched = normalizedTarget
+      ? offers.find((offer) => normalizeShopKey(safeString(offer.name)) === normalizedTarget)
+      : null;
+
+    return {
+      rankBase: Number(rank),
+      priceBase: Number(price),
+      name: matched ? safeString(matched.name) : safeString(shopName)
     };
+  }, [
+    effectiveAnalysis.myShopFound,
+    effectiveAnalysis.myShopPosition,
+    effectiveAnalysis.myShopPrice,
+    effectiveAnalysis.offers,
+    shopName
+  ]);
 
-    let baseList = sorted.slice(0, 4);
-    const hasUser = baseList.some(
-      (item) => safeString(item.name).toLowerCase() === userItem.name.toLowerCase()
-    );
+  const computedUser = useMemo(
+    () => computeSimulatedUser(userShopBase, smoothPriceDropPercent),
+    [userShopBase, smoothPriceDropPercent]
+  );
 
-    if (!hasUser) {
-      baseList = [...baseList, userItem];
-    }
-
-    baseList.sort((a, b) => a.price - b.price);
-
-    if (baseList.length > 5) {
-      const withoutUser = baseList.filter((item) => item.id !== 'my-shop');
-      baseList = [...withoutUser.slice(0, 4), userItem];
-      baseList.sort((a, b) => a.price - b.price);
-    }
-
-    const leaderId = baseList[0]?.id;
-
-    return baseList.map((item) => ({
-      ...item,
-      isLeader: item.id === leaderId
-    }));
-  }, [effectiveAnalysis.offers, simulatedPrice]);
+  const rankingRenderList = useMemo(
+    () => buildMiniRating(top5Sellers, computedUser, shopName),
+    [top5Sellers, computedUser, shopName]
+  );
 
   if (viewState === 'loading') {
     return <LoadingState />;
@@ -182,8 +219,8 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
             transition={{ delay: 0.15 }}
           >
             <PriceSimulator
-              percent={priceDropPercent}
-              onChange={setPriceDropPercent}
+              percent={rawPriceDropPercent}
+              onChange={setRawPriceDropPercent}
               basePrice={basePrice}
               simulatedPrice={simulatedPrice}
               leaderPrice={leaderPrice}
@@ -200,7 +237,7 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <PositionRanking items={rankingItems} />
+              <PositionRanking renderList={rankingRenderList} />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 12 }}
