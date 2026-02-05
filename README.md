@@ -71,10 +71,7 @@ PORT=4000
 CORS_ORIGIN=http://localhost:3000
 ```
 
-Дополнительно (опционально):
-```
-KASPI_LIMIT=5
-KASPI_ZONE_ID=Magnum_ZONE1
+
 ```
 
 ## Запуск
