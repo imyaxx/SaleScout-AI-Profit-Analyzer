@@ -11,7 +11,7 @@ export interface KaspiAnalysis {
   myShopPrice: number | null;
   myShopPosition: number | null;
   priceToTop1: number | null;
-  offers: { name: string; price: number }[];
+  offers: { name: string; price: number; rating?: number | null; reviewCount?: number | null }[];
 }
 
 export interface LeadPayload {

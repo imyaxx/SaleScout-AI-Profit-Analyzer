@@ -4,18 +4,24 @@ export type Top5Seller = {
   rank: number;
   name: string;
   price: number;
+  rating: number | null;
+  reviewCount: number | null;
 };
 
 export type UserShopBase = {
   rankBase: number;
   priceBase: number;
   name?: string;
+  rating?: number | null;
+  reviewCount?: number | null;
 };
 
 export type ComputedUser = {
   rank: number;
   price: number;
   name?: string;
+  rating?: number | null;
+  reviewCount?: number | null;
 };
 
 export type MiniSellerRankingRenderItem = {
@@ -26,6 +32,8 @@ export type MiniSellerRankingRenderItem = {
   subtitle: string;
   price: number;
   isHighlighted: boolean;
+  rating: number | null;
+  reviewCount: number | null;
 };
 
 export type MiniSellerRankingLabels = {
@@ -69,7 +77,9 @@ export function computeSimulatedUser(
   return {
     rank,
     price,
-    name: userShopBase.name
+    name: userShopBase.name,
+    rating: userShopBase.rating ?? null,
+    reviewCount: userShopBase.reviewCount ?? null
   };
 }
 
@@ -98,7 +108,9 @@ export function buildMiniRating(
       title: name,
       subtitle: '',
       price: Number(seller.price),
-      isHighlighted: false
+      isHighlighted: false,
+      rating: seller.rating ?? null,
+      reviewCount: seller.reviewCount ?? null
     });
   }
 
@@ -126,7 +138,9 @@ export function buildMiniRating(
     title: labels.userTitle,
     subtitle: String(userShopName ?? ''),
     price: userPrice,
-    isHighlighted: true
+    isHighlighted: true,
+    rating: computedUser?.rating ?? null,
+    reviewCount: computedUser?.reviewCount ?? null
   };
 
   if (userRank >= 1 && userRank <= 5) {

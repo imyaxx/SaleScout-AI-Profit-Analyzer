@@ -13,7 +13,7 @@ import {
   useReducedMotion,
   useTransform,
 } from "framer-motion";
-import { Award } from "lucide-react";
+import { Award, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn, formatMoney } from "../../lib/utils";
 import { MiniSellerRankingRenderItem } from "../../lib/miniSellerRanking";
@@ -21,6 +21,17 @@ import sellersBg from "../../assets/sellers-bg.png";
 
 interface PositionRankingProps {
   renderList: MiniSellerRankingRenderItem[];
+}
+
+function pluralizeReviews(count: number, lang: string): string {
+  if (lang === 'en') return count === 1 ? 'review' : 'reviews';
+  if (lang === 'kk') return 'пікір';
+  // Russian pluralization
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'отзыв';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'отзыва';
+  return 'отзывов';
 }
 
 const layoutEase: [number, number, number, number] = [0.4, 0, 0.2, 1];
@@ -108,7 +119,7 @@ function useAnimatedRanking(renderList: MiniSellerRankingRenderItem[]) {
 }
 
 const PositionRanking: React.FC<PositionRankingProps> = ({ renderList }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const reduceMotion = useReducedMotion();
   const animatedList = useAnimatedRanking(renderList);
 
@@ -149,7 +160,7 @@ const PositionRanking: React.FC<PositionRankingProps> = ({ renderList }) => {
           >
             <motion.div
               layout={!reduceMotion}
-              className="space-y-2 overflow-y-auto flex-1"
+              className="space-y-1 overflow-y-auto flex-1"
               style={{ scrollbarWidth: "none" }}
             >
               <AnimatePresence initial={false} mode="popLayout">
@@ -177,46 +188,71 @@ const PositionRanking: React.FC<PositionRankingProps> = ({ renderList }) => {
                             }
                       }
                       className={cn(
-                        "flex items-center justify-between px-3 py-2 rounded-xl border",
+                        "px-2 py-1.5 rounded-lg border",
                         item.isHighlighted
                           ? "border-red-200 bg-red-50/80"
                           : "border-gray-100 bg-white/90",
                       )}
                     >
-                      <div className="min-w-0">
+                      {/* Row 1: Name + Select button */}
+                      <div className="flex items-center justify-between gap-1">
+                        <div className="min-w-0 flex-1">
+                          <p
+                            className={cn(
+                              "text-[10px] font-semibold truncate leading-tight",
+                              item.isHighlighted
+                                ? "text-red-600"
+                                : "text-gray-900",
+                            )}
+                          >
+                            {item.title}
+                          </p>
+                          {item.subtitle?.length ? (
+                            <p className="text-[9px] text-red-400 truncate leading-tight">
+                              {item.subtitle}
+                            </p>
+                          ) : null}
+                        </div>
+                        <span
+                          className="px-1.5 py-px text-[8px] font-medium rounded bg-blue-500 text-white whitespace-nowrap flex-shrink-0"
+                        >
+                          {t("analysis.ranking.select")}
+                        </span>
+                      </div>
+
+                      {/* Row 2: Rating + review count + Price */}
+                      <div className="flex items-center justify-between mt-0.5">
+                        <div className="flex items-center gap-1">
+                          {item.rating !== null && (
+                            <span className="flex items-center gap-0.5 text-[9px] text-gray-500 font-medium bg-gray-100 rounded px-0.5">
+                              {item.rating.toFixed(1)}
+                              <Star size={8} className="fill-green-500 text-green-500" />
+                            </span>
+                          )}
+                          {item.reviewCount !== null && (
+                            <span className="text-[9px] text-gray-400">
+                              {item.reviewCount} {pluralizeReviews(item.reviewCount, i18n.language)}
+                            </span>
+                          )}
+                        </div>
                         <p
                           className={cn(
-                            "text-xs font-semibold truncate",
+                            "text-[10px] font-bold whitespace-nowrap",
                             item.isHighlighted
                               ? "text-red-600"
                               : "text-gray-900",
                           )}
                         >
-                          {item.title}
+                          {reduceMotion ? (
+                            formatMoney(item.price)
+                          ) : (
+                            <AnimatedPrice
+                              value={item.price}
+                              reduceMotion={reduceMotion}
+                            />
+                          )}
                         </p>
-                        {item.subtitle?.length ? (
-                          <p className="text-[10px] text-red-400 truncate">
-                            {item.subtitle}
-                          </p>
-                        ) : null}
                       </div>
-                      <p
-                        className={cn(
-                          "text-xs font-semibold whitespace-nowrap ml-1",
-                          item.isHighlighted
-                            ? "text-red-600"
-                            : "text-gray-600",
-                        )}
-                      >
-                        {reduceMotion ? (
-                          formatMoney(item.price)
-                        ) : (
-                          <AnimatedPrice
-                            value={item.price}
-                            reduceMotion={reduceMotion}
-                          />
-                        )}
-                      </p>
                     </motion.div>
                   );
                 })}

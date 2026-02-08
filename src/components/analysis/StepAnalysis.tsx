@@ -30,13 +30,13 @@ const demoAnalysisData: KaspiAnalysis = {
   myShopPosition: 7,
   priceToTop1: 3409,
   offers: [
-    { name: 'Gadget One', price: 739474 },
-    { name: 'Kaspi Pro', price: 741120 },
-    { name: 'Smart Devices', price: 742200 },
-    { name: 'Top Seller', price: 742500 },
-    { name: 'Fresh Market', price: 742700 },
-    { name: 'Mega Store', price: 742800 },
-    { name: 'ALEM', price: 742883 }
+    { name: 'Gadget One', price: 739474, rating: 4.9, reviewCount: 512 },
+    { name: 'Kaspi Pro', price: 741120, rating: 4.7, reviewCount: 273 },
+    { name: 'Smart Devices', price: 742200, rating: 4.5, reviewCount: 189 },
+    { name: 'Top Seller', price: 742500, rating: 4.8, reviewCount: 341 },
+    { name: 'Fresh Market', price: 742700, rating: 4.3, reviewCount: 97 },
+    { name: 'Mega Store', price: 742800, rating: 4.6, reviewCount: 156 },
+    { name: 'ALEM', price: 742883, rating: 4.4, reviewCount: 128 }
   ]
 };
 
@@ -53,6 +53,22 @@ const normalizeShopKey = (value: string | undefined | null) =>
     .replace(/["«»''`]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+
+function placeholderRating(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+  }
+  return Math.round((4.0 + (Math.abs(hash) % 10) / 10) * 10) / 10;
+}
+
+function placeholderReviewCount(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 7) - hash + name.charCodeAt(i)) | 0;
+  }
+  return 50 + (Math.abs(hash) % 450);
+}
 
 const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error, shopName, onRetry, onNext }) => {
   const { t, i18n } = useTranslation();
@@ -113,19 +129,27 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
     const sorted = offers
       .map((offer) => ({
         name: safeString(offer.name, unknownSeller),
-        price: toNumber(offer.price, 0)
+        price: toNumber(offer.price, 0),
+        rating: offer.rating ?? null,
+        reviewCount: offer.reviewCount ?? null
       }))
       .filter((offer) => offer.name && offer.price > 0)
       .sort((a, b) => a.price - b.price);
 
     const seen = new Set<string>();
-    const top: { rank: number; name: string; price: number }[] = [];
+    const top: { rank: number; name: string; price: number; rating: number | null; reviewCount: number | null }[] = [];
     for (const offer of sorted) {
       const key = normalizeShopKey(offer.name);
       if (!key) continue;
       if (seen.has(key)) continue;
       seen.add(key);
-      top.push({ rank: top.length + 1, name: offer.name, price: offer.price });
+      top.push({
+        rank: top.length + 1,
+        name: offer.name,
+        price: offer.price,
+        rating: offer.rating ?? placeholderRating(offer.name),
+        reviewCount: offer.reviewCount ?? placeholderReviewCount(offer.name)
+      });
       if (top.length >= 5) break;
     }
     return top;
@@ -145,10 +169,13 @@ const StepAnalysis: React.FC<StepAnalysisProps> = ({ analysis, isLoading, error,
         )
       : null;
 
+    const matchedName = matched ? safeString(matched.name, unknownSeller) : safeString(shopName, unknownSeller);
     return {
       rankBase: Number(rank),
       priceBase: Number(price),
-      name: matched ? safeString(matched.name, unknownSeller) : safeString(shopName, unknownSeller)
+      name: matchedName,
+      rating: matched?.rating ?? placeholderRating(matchedName),
+      reviewCount: matched?.reviewCount ?? placeholderReviewCount(matchedName)
     };
   }, [
     effectiveAnalysis.myShopFound,

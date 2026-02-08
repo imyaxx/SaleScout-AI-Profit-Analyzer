@@ -89,7 +89,9 @@ const resources = {
         ranking: {
           kicker: 'Позиция на Kaspi',
           title: 'Ваш магазин с SaleScout',
-          yourShop: 'Ваш магазин'
+          yourShop: 'Ваш магазин',
+          reviews: 'отзывов',
+          select: 'Выбрать'
         }
       },
       lead: {
@@ -222,7 +224,9 @@ const resources = {
         ranking: {
           kicker: 'Kaspi-дегі орын',
           title: 'SaleScout-пен сіздің дүкеніңіз',
-          yourShop: 'Сіздің дүкеніңіз'
+          yourShop: 'Сіздің дүкеніңіз',
+          reviews: 'пікір',
+          select: 'Таңдау'
         }
       },
       lead: {
@@ -355,7 +359,9 @@ const resources = {
         ranking: {
           kicker: 'Kaspi position',
           title: 'Your store with SaleScout',
-          yourShop: 'Your store'
+          yourShop: 'Your store',
+          reviews: 'reviews',
+          select: 'Select'
         }
       },
       lead: {

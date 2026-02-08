@@ -31,7 +31,9 @@ const recordSchema = new mongoose.Schema(
     offers: [
       {
         name: { type: String, required: true },
-        price: { type: Number, required: true }
+        price: { type: Number, required: true },
+        rating: { type: Number, required: false, default: null },
+        reviewCount: { type: Number, required: false, default: null }
       }
     ],
     position: {

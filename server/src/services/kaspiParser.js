@@ -41,6 +41,37 @@ function extractOfferName(offer) {
   );
 }
 
+function extractOfferRating(offer) {
+  const raw =
+    offer?.merchantRating ??
+    offer?.rating ??
+    offer?.sellerRating ??
+    offer?.shopRating ??
+    offer?.merchantInfo?.rating ??
+    offer?.seller?.rating ??
+    null;
+  if (raw === null || raw === undefined) return null;
+  const value = Number(raw);
+  return Number.isFinite(value) && value >= 0 && value <= 5
+    ? Math.round(value * 10) / 10
+    : null;
+}
+
+function extractOfferReviewCount(offer) {
+  const raw =
+    offer?.merchantReviewsQuantity ??
+    offer?.reviewsQuantity ??
+    offer?.reviewCount ??
+    offer?.reviewsCount ??
+    offer?.totalReviews ??
+    offer?.merchantInfo?.reviewsQuantity ??
+    offer?.seller?.reviewsQuantity ??
+    null;
+  if (raw === null || raw === undefined) return null;
+  const value = Number(raw);
+  return Number.isFinite(value) && value >= 0 ? Math.round(value) : null;
+}
+
 function extractOfferPrice(offer) {
   const raw =
     offer?.price ??
@@ -185,10 +216,13 @@ export async function analyzeKaspiProduct(productUrl, myShopName) {
       const price = extractOfferPrice(offer);
       if (price === null) return;
 
+      const rating = extractOfferRating(offer);
+      const reviewCount = extractOfferReviewCount(offer);
+
       if (!offersMap.has(offerName)) {
-        offersMap.set(offerName, { name: rawName, price });
+        offersMap.set(offerName, { name: rawName, price, rating, reviewCount });
       } else if (price < offersMap.get(offerName).price) {
-        offersMap.set(offerName, { name: rawName, price });
+        offersMap.set(offerName, { name: rawName, price, rating, reviewCount });
       }
 
       if (offerName !== normalizedTarget) return;
