@@ -1,20 +1,22 @@
 .root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
+  flex: 1;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 1.5rem 1rem 2.5rem;
+  width: 100%;
 }
 
 .footer {
-  margin-top: 2rem;
-  padding-top: 2rem;
+  margin-top: auto;
+  padding: 2rem 1rem;
   border-top: 1px solid var(--color-gray-100);
   text-align: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .footerText {
@@ -26,17 +28,10 @@
   .content {
     padding: 2.5rem 1rem;
   }
-  .footer {
-    margin-top: 3rem;
-    padding-top: 3rem;
-  }
 }
 
 @media (min-width: 768px) {
   .content {
     padding: 4rem 1rem;
-  }
-  .footer {
-    margin-top: 5rem;
   }
 }

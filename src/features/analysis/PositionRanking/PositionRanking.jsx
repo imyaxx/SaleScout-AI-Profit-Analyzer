@@ -99,7 +99,8 @@ function useAnimatedRanking(renderList) {
     const others = pricedOthers ?? baseOthers;
     if (!userItem) return others;
     if (isPromoted && !isAlreadyFirst) {
-      const promotedUser = { ...userItem, price: leaderPrice - 1 };
+      const currentMin = others.length > 0 ? Math.min(...others.map((i) => i.price)) : leaderPrice;
+      const promotedUser = { ...userItem, price: currentMin - 1 };
       return [promotedUser, ...others];
     }
     const userIndex = renderList.indexOf(userItem);

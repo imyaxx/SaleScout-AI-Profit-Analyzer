@@ -53,29 +53,6 @@ export default function StepWelcome({ onNext }) {
           </motion.button>
         </div>
 
-        <motion.div {...animations.demoCard} className={s.demoCard}>
-          <div className={s.demoBlur} />
-          <div className={s.demoStack}>
-            <div className={s.demoHeader}>
-              <span className={s.demoTag}>{t('welcome.card.tag')}</span>
-              <span className={s.demoTime}>{t('welcome.card.time')}</span>
-            </div>
-            <div className={s.demoItems}>
-              <div className={s.demoItem}>
-                <p className={s.demoItemLabel}>{t('welcome.card.currentPosition')}</p>
-                <p className={s.demoItemValue}>#7</p>
-              </div>
-              <div className={s.demoItem}>
-                <p className={s.demoItemLabel}>{t('welcome.card.priceToTop')}</p>
-                <p className={s.demoItemValueBlue}>−3 409 ₸</p>
-              </div>
-              <div className={s.demoItem}>
-                <p className={s.demoItemLabel}>{t('welcome.card.ai')}</p>
-                <p className={s.demoItemDesc}>{t('welcome.card.aiDesc')}</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </div>
   );
