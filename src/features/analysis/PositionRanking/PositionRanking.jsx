@@ -1,35 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AnimatePresence,
-  animate,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from 'framer-motion';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion, useSpring } from 'framer-motion';
 import { Star } from 'lucide-react';
 import kaspiLogo from '@/assets/Logo_of_Kaspi_bank.png';
 import { useTranslation } from 'react-i18next';
 import { formatMoney, cn } from '@/shared/lib/utils';
 import sellersBg from '@/assets/sellers-bg.png';
-import { RANKING_PAUSE_AT_BOTTOM_MS, RANKING_SHUFFLE_INTERVAL_MS } from '@/shared/constants/app';
 import s from './PositionRanking.module.css';
 
+/* ── Animation config ── */
 const EASE_STANDARD = [0.4, 0, 0.2, 1];
 
-const animations = {
-  layoutTransition: {
-    layout: { type: 'tween', duration: 1.2, ease: EASE_STANDARD },
-    opacity: { duration: 0.5, ease: EASE_STANDARD },
-    y: { duration: 0.5, ease: EASE_STANDARD },
-  },
-  priceTween: { type: 'tween', duration: 1.0, ease: EASE_STANDARD },
-  sellerItem: {
-    initial: { opacity: 0, y: 4 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 4 },
-  },
+const layoutTransition = {
+  layout: { type: 'tween', duration: 0.8, ease: EASE_STANDARD },
 };
+
+/* ── Timing ── */
+const JUMP_DELAY_MS = 600; // pause before user jumps to #1
+const SHUFFLE_STEP_MS = 4500; // how often a competitor changes price
+const SHUFFLE_START_DELAY_MS = 1500; // pause before shuffle begins after jump
+const PRICE_VARIATION_PCT = 0.02; // ±2% price swing for competitors
 
 function pluralizeReviews(count, lang) {
   if (lang === 'en') return count === 1 ? 'review' : 'reviews';
@@ -41,89 +30,151 @@ function pluralizeReviews(count, lang) {
   return 'отзывов';
 }
 
-function AnimatedPrice({ value, reduceMotion }) {
-  const motionValue = useMotionValue(value);
-  const formatted = useTransform(motionValue, (latest) => formatMoney(Math.round(latest)));
+/* ── Animated price counter ── */
+function AnimatedPrice({ value, className }) {
+  const spring = useSpring(value, { stiffness: 80, damping: 20 });
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
-    if (reduceMotion) {
-      motionValue.set(value);
-      return;
-    }
-    const controls = animate(motionValue, value, animations.priceTween);
-    return controls.stop;
-  }, [motionValue, reduceMotion, value]);
+    spring.set(value);
+  }, [value, spring]);
 
-  return <motion.span>{formatted}</motion.span>;
+  useEffect(() => {
+    return spring.on('change', (v) => setDisplay(Math.round(v)));
+  }, [spring]);
+
+  return <p className={className}>{formatMoney(display)}</p>;
 }
 
-function useAnimatedRanking(renderList) {
-  const [isPromoted, setIsPromoted] = useState(false);
-  const [pricedOthers, setPricedOthers] = useState(null);
-  const timerRef = useRef(undefined);
-  const shuffleRef = useRef(undefined);
-
+/**
+ * Core hook: orchestrates the "climb to #1" animation.
+ *
+ * User starts at the bottom with their real price, then every CLIMB_STEP_MS
+ * beats one opponent above by setting price = opponent.price - 1, climbing
+ * one position at a time until reaching #1. Animation stops after that.
+ */
+function useRankingAnimation(renderList, reduceMotion) {
   const userItem = useMemo(() => renderList.find((i) => i.type === 'user'), [renderList]);
-  const leaderPrice = useMemo(() => {
-    const topItems = renderList.filter((i) => i.type === 'top');
-    if (topItems.length === 0) return 0;
-    return Math.min(...topItems.map((i) => i.price));
+  const baseOthers = useMemo(() => {
+    return renderList.filter((i) => i.type !== 'user');
   }, [renderList]);
 
-  const isAlreadyFirst = useMemo(() => {
-    if (!userItem) return false;
-    return userItem.price <= leaderPrice || leaderPrice === 0;
-  }, [userItem, leaderPrice]);
+  // Always start user at the bottom — even if already #1 on Kaspi.
+  // User's real price is bumped above the most expensive seller so they visually start last.
+  const initialList = useMemo(() => {
+    const sorted = [...baseOthers].sort((a, b) => a.price - b.price);
+    if (!userItem) return sorted;
+    const maxPrice = sorted.length > 0 ? sorted[sorted.length - 1].price : 0;
+    const startPrice = Math.max(userItem.price, maxPrice + 1);
+    return [...sorted, { ...userItem, price: startPrice }];
+  }, [userItem, baseOthers]);
 
-  const baseOthers = useMemo(() => renderList.filter((i) => i.type !== 'user'), [renderList]);
+  const [list, setList] = useState(initialList);
+  const timerRef = useRef(null);
+  const basePricesRef = useRef(new Map());
 
+  // Reset when renderList changes
   useEffect(() => {
-    if (baseOthers.length < 2) return;
-    const tick = () => {
-      setPricedOthers((prev) => {
-        const list = (prev ?? baseOthers).map((item) => {
-          const base = item._basePrice ?? item.price;
-          const swing = Math.round(base * 0.003);
-          const delta = Math.floor(Math.random() * (swing * 2 + 1)) - swing;
-          return { ...item, _basePrice: base, price: base + delta };
-        });
-        list.sort((a, b) => a.price - b.price);
-        return list;
-      });
-    };
-    shuffleRef.current = window.setInterval(tick, RANKING_SHUFFLE_INTERVAL_MS);
-    return () => clearInterval(shuffleRef.current);
-  }, [baseOthers]);
-
-  const animatedList = useMemo(() => {
-    const others = pricedOthers ?? baseOthers;
-    if (!userItem) return others;
-    if (isPromoted && !isAlreadyFirst) {
-      const currentMin = others.length > 0 ? Math.min(...others.map((i) => i.price)) : leaderPrice;
-      const promotedUser = { ...userItem, price: currentMin - 1 };
-      return [promotedUser, ...others];
+    setList(initialList);
+    // Remember original prices for competitors so shuffle varies around them
+    const map = new Map();
+    for (const item of initialList) {
+      if (item.type !== 'user') map.set(item.uniqueId, item.price);
     }
-    const userIndex = renderList.indexOf(userItem);
-    const result = [...others];
-    result.splice(Math.min(userIndex, result.length), 0, userItem);
-    return result;
-  }, [renderList, userItem, isPromoted, isAlreadyFirst, leaderPrice, baseOthers, pricedOthers]);
-
-  useEffect(() => {
-    if (!userItem || isAlreadyFirst || isPromoted) return;
-    timerRef.current = window.setTimeout(() => {
-      setIsPromoted(true);
-    }, RANKING_PAUSE_AT_BOTTOM_MS);
+    basePricesRef.current = map;
     return () => clearTimeout(timerRef.current);
-  }, [userItem, isAlreadyFirst, isPromoted]);
+  }, [initialList]);
 
-  return animatedList;
+  // ── Sort helper (user always wins ties) ──
+  const sortWithUserFirst = (arr) => {
+    arr.sort((a, b) => {
+      if (a.price !== b.price) return a.price - b.price;
+      if (a.type === 'user') return -1;
+      if (b.type === 'user') return 1;
+      return 0;
+    });
+    return arr;
+  };
+
+  // ── Jump to #1: user immediately gets leader price - 1 ──
+  const jumpToFirst = useCallback(() => {
+    setList((prev) => {
+      if (!userItem) return prev;
+      const minCompetitorPrice = Math.min(
+        ...prev.filter((i) => i.type !== 'user').map((i) => i.price),
+      );
+      const next = prev.map((item) =>
+        item.type === 'user' ? { ...item, price: minCompetitorPrice - 1 } : item,
+      );
+      return sortWithUserFirst(next);
+    });
+  }, [userItem]);
+
+  // ── Shuffle logic: randomly change one competitor's price, keep user at #1 ──
+  const shuffleStep = useCallback(() => {
+    setList((prev) => {
+      const competitors = prev.filter((i) => i.type !== 'user');
+      if (competitors.length === 0) return prev;
+
+      // Pick a random competitor
+      const idx = Math.floor(Math.random() * competitors.length);
+      const target = competitors[idx];
+      const basePrice = basePricesRef.current.get(target.uniqueId) ?? target.price;
+
+      // Vary price ±PRICE_VARIATION_PCT around the original price
+      const variation = 1 + (Math.random() * 2 - 1) * PRICE_VARIATION_PCT;
+      const newPrice = Math.round(basePrice * variation);
+
+      const next = prev.map((item) => {
+        if (item.uniqueId === target.uniqueId) return { ...item, price: newPrice };
+        return item;
+      });
+
+      // Recalculate user price: always min(competitors) - 1
+      const minCompetitorPrice = Math.min(
+        ...next.filter((i) => i.type !== 'user').map((i) => i.price),
+      );
+      const adjusted = next.map((item) =>
+        item.type === 'user' ? { ...item, price: minCompetitorPrice - 1 } : item,
+      );
+      return sortWithUserFirst(adjusted);
+    });
+  }, []);
+
+  // Static fallback for reduced motion — show final state (user at #1)
+  const staticList = useMemo(() => {
+    const others = [...baseOthers].sort((a, b) => a.price - b.price);
+    if (!userItem) return others;
+    const leaderPrice = others.length > 0 ? others[0].price : userItem.price;
+    const finalPrice = leaderPrice - 1;
+    return [{ ...userItem, price: finalPrice }, ...others];
+  }, [userItem, baseOthers]);
+
+  // ── Timer orchestration ──
+  useEffect(() => {
+    if (reduceMotion || !userItem) return;
+
+    const runShuffle = () => {
+      shuffleStep();
+      timerRef.current = setTimeout(runShuffle, SHUFFLE_STEP_MS);
+    };
+
+    // Jump to #1 after a short delay, then start shuffle
+    timerRef.current = setTimeout(() => {
+      jumpToFirst();
+      timerRef.current = setTimeout(runShuffle, SHUFFLE_START_DELAY_MS);
+    }, JUMP_DELAY_MS);
+
+    return () => clearTimeout(timerRef.current);
+  }, [reduceMotion, userItem, jumpToFirst, shuffleStep]);
+
+  return reduceMotion ? staticList : list;
 }
 
 export default function PositionRanking({ renderList }) {
   const { t, i18n } = useTranslation();
   const reduceMotion = useReducedMotion();
-  const animatedList = useAnimatedRanking(renderList);
+  const animatedList = useRankingAnimation(renderList, reduceMotion);
 
   return (
     <div className={s.root}>
@@ -140,15 +191,7 @@ export default function PositionRanking({ renderList }) {
       <div className={s.phoneWrap}>
         <img src={sellersBg} alt="" className={s.phoneBg} draggable={false} />
         <div className={s.overlay}>
-          <div
-            className={s.listContainer}
-            style={{
-              paddingTop: '58%',
-              paddingBottom: '14%',
-              paddingLeft: '8%',
-              paddingRight: '8%',
-            }}
-          >
+          <div className={s.listContainer}>
             <motion.div layout={!reduceMotion} className={s.listScroll}>
               <AnimatePresence initial={false} mode="popLayout">
                 {animatedList.map((item) => {
@@ -158,10 +201,7 @@ export default function PositionRanking({ renderList }) {
                       layout={reduceMotion ? false : 'position'}
                       layoutId={reduceMotion ? undefined : `seller-${itemKey}`}
                       key={itemKey}
-                      initial={reduceMotion ? false : animations.sellerItem.initial}
-                      animate={reduceMotion ? undefined : animations.sellerItem.animate}
-                      exit={reduceMotion ? undefined : animations.sellerItem.exit}
-                      transition={reduceMotion ? undefined : animations.layoutTransition}
+                      transition={reduceMotion ? undefined : layoutTransition}
                       className={cn(s.sellerRow, item.isHighlighted && s.sellerRowHighlighted)}
                     >
                       <div className={s.sellerNameRow}>
@@ -195,13 +235,10 @@ export default function PositionRanking({ renderList }) {
                             </span>
                           )}
                         </div>
-                        <p className={cn(s.price, item.isHighlighted && s.priceHighlighted)}>
-                          {reduceMotion ? (
-                            formatMoney(item.price)
-                          ) : (
-                            <AnimatedPrice value={item.price} reduceMotion={reduceMotion} />
-                          )}
-                        </p>
+                        <AnimatedPrice
+                          value={item.price}
+                          className={cn(s.price, item.isHighlighted && s.priceHighlighted)}
+                        />
                       </div>
                     </motion.div>
                   );

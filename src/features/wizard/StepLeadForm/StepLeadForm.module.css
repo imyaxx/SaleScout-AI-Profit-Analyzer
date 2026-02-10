@@ -64,26 +64,28 @@
   box-shadow:
     var(--shadow-xl),
     0 0 15px -3px rgba(30, 64, 175, 0.05);
-  padding: 1rem;
+  padding: 0.875rem 1rem;
 }
 
 .headerRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.625rem;
 }
 
 .title {
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
   font-weight: 700;
   color: var(--color-gray-900);
+  line-height: 1.2;
 }
 
 .subtitle {
   color: var(--color-gray-500);
-  font-size: var(--font-sm);
-  margin-top: 0.25rem;
+  font-size: var(--font-xs);
+  margin-top: 0.125rem;
+  line-height: 1.3;
 }
 
 .btnBackDesktop {
@@ -105,11 +107,11 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .textareaWrap {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .textareaField {
@@ -117,16 +119,16 @@
 }
 
 .serverError {
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   color: var(--color-red-500);
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .btnBackMobile {
@@ -135,7 +137,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-2xl);
   font-size: var(--font-sm);
@@ -156,7 +158,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   background: var(--color-brand-600);
   color: #fff;
   border-radius: var(--radius-2xl);
@@ -206,6 +208,14 @@
   .headerRow {
     margin-bottom: 1.5rem;
   }
+  .title {
+    font-size: var(--font-2xl);
+    line-height: normal;
+  }
+  .subtitle {
+    font-size: var(--font-sm);
+    margin-top: 0.25rem;
+  }
   .btnBackDesktop {
     display: inline-flex;
   }
@@ -227,8 +237,9 @@
     width: auto;
     padding: 0.875rem 2rem;
   }
-  .title {
-    font-size: var(--font-2xl);
+  .serverError {
+    font-size: var(--font-sm);
+    margin-top: 1rem;
   }
 }
 

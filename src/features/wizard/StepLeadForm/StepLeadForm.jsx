@@ -195,7 +195,7 @@ export default function StepLeadForm({
           error={touched.description ? errors.description : null}
         >
           <textarea
-            rows={3}
+            rows={2}
             value={values.description}
             onChange={(e) => {
               onChange({ description: e.target.value });
