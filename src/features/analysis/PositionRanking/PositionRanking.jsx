@@ -59,7 +59,7 @@ function AnimatedPrice({ value, reduceMotion }) {
 
 function useAnimatedRanking(renderList) {
   const [isPromoted, setIsPromoted] = useState(false);
-  const [shuffledOthers, setShuffledOthers] = useState(null);
+  const [pricedOthers, setPricedOthers] = useState(null);
   const timerRef = useRef(undefined);
   const shuffleRef = useRef(undefined);
 
@@ -80,12 +80,14 @@ function useAnimatedRanking(renderList) {
   useEffect(() => {
     if (baseOthers.length < 2) return;
     const tick = () => {
-      setShuffledOthers((prev) => {
-        const list = [...(prev ?? baseOthers)];
-        const a = Math.floor(Math.random() * list.length);
-        let b = Math.floor(Math.random() * (list.length - 1));
-        if (b >= a) b++;
-        [list[a], list[b]] = [list[b], list[a]];
+      setPricedOthers((prev) => {
+        const list = (prev ?? baseOthers).map((item) => {
+          const base = item._basePrice ?? item.price;
+          const swing = Math.round(base * 0.003);
+          const delta = Math.floor(Math.random() * (swing * 2 + 1)) - swing;
+          return { ...item, _basePrice: base, price: base + delta };
+        });
+        list.sort((a, b) => a.price - b.price);
         return list;
       });
     };
@@ -94,18 +96,17 @@ function useAnimatedRanking(renderList) {
   }, [baseOthers]);
 
   const animatedList = useMemo(() => {
-    const others = shuffledOthers ?? baseOthers;
+    const others = pricedOthers ?? baseOthers;
     if (!userItem) return others;
     if (isPromoted && !isAlreadyFirst) {
-      const promotedPrice = leaderPrice - 1;
-      const promotedUser = { ...userItem, price: promotedPrice };
+      const promotedUser = { ...userItem, price: leaderPrice - 1 };
       return [promotedUser, ...others];
     }
     const userIndex = renderList.indexOf(userItem);
     const result = [...others];
     result.splice(Math.min(userIndex, result.length), 0, userItem);
     return result;
-  }, [renderList, userItem, isPromoted, isAlreadyFirst, leaderPrice, baseOthers, shuffledOthers]);
+  }, [renderList, userItem, isPromoted, isAlreadyFirst, leaderPrice, baseOthers, pricedOthers]);
 
   useEffect(() => {
     if (!userItem || isAlreadyFirst || isPromoted) return;

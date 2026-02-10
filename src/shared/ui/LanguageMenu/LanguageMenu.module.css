@@ -1,0 +1,122 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 60;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  min-width: 5.75rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  color: var(--color-gray-700);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.button:hover {
+  background: var(--color-blue-50);
+  border-color: var(--color-blue-100);
+  color: var(--color-brand-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.button:active {
+  background: var(--color-blue-100);
+  border-color: var(--color-blue-200);
+}
+
+.button:focus-visible {
+  outline: none;
+  border-color: var(--color-brand-600);
+  box-shadow: 0 0 0 2px var(--color-blue-100);
+}
+
+.buttonOpen {
+  background: var(--color-blue-50);
+  border-color: var(--color-blue-100);
+  color: var(--color-brand-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon {
+  color: var(--color-brand-600);
+}
+
+.label {
+  letter-spacing: 0.02em;
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+  color: var(--color-gray-500);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 100%;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.35rem;
+  z-index: 70;
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--color-gray-700);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.menuItem:hover {
+  background: var(--color-gray-100);
+}
+
+.menuItem:focus-visible {
+  outline: none;
+  background: var(--color-blue-50);
+  box-shadow: inset 0 0 0 1px var(--color-blue-100);
+}
+
+.menuItemActive {
+  background: var(--color-blue-50);
+  color: var(--color-brand-600);
+}
+
+.menuCheck {
+  opacity: 0;
+  color: var(--color-brand-600);
+}
+
+.menuCheckActive {
+  opacity: 1;
+}

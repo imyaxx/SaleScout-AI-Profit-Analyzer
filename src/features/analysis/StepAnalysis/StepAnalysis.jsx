@@ -4,7 +4,6 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LoadingState, ErrorState } from '@/shared/ui/States';
 import ErrorBoundary from '@/shared/ui/ErrorBoundary';
-import ProfitChart from '@/features/analysis/ProfitChart';
 import FomoBlock from '@/features/analysis/FomoBlock';
 import PositionRanking from '@/features/analysis/PositionRanking';
 import PriceSimulator from '@/features/analysis/PriceSimulator';
@@ -207,14 +206,7 @@ export default function StepAnalysis({
           </div>
         </div>
 
-        <motion.div {...section(0.05)}>
-          <ProfitChart
-            currentSeries={chartData.currentSeries}
-            optimizedSeries={chartData.optimizedSeries}
-          />
-        </motion.div>
-
-        <motion.div {...section(0.1)}>
+        <motion.div {...section(0.1)} className={s.fomoSection}>
           <FomoBlock value={fomoValue} />
         </motion.div>
 

@@ -68,6 +68,11 @@
   height: 100%;
 }
 
+.fomoSection {
+  margin-top: -0.5rem;
+  margin-bottom: -0.75rem;
+}
+
 .errorWrap {
   display: flex;
   flex-direction: column;
@@ -137,6 +142,10 @@
   }
   .grid {
     gap: 2rem;
+  }
+  .fomoSection {
+    margin-top: -1rem;
+    margin-bottom: -1.25rem;
   }
 }
 

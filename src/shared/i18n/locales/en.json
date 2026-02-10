@@ -7,7 +7,7 @@
       "lead": "Request"
     },
     "welcome": {
-      "badge": "SaleScout AI Analysis",
+      "badge": "SaleScout Analysis",
       "title": "Let\u2019s analyze your store\u2019s profit",
       "subtitle": "See in 30 seconds how to reach Top-1 on Kaspi",
       "cta": "Start analysis",
@@ -16,7 +16,7 @@
         "time": "~30 sec",
         "currentPosition": "Current position",
         "priceToTop": "Price to Top-1",
-        "ai": "AI recommendations",
+        "ai": "Recommendations",
         "aiDesc": "Optimize price and description \u2014 sales up to 15%"
       }
     },

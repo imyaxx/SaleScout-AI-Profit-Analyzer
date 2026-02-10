@@ -7,8 +7,7 @@ import StepInput from '@/features/wizard/StepInput';
 import StepAnalysis from '@/features/analysis/StepAnalysis';
 import StepLeadForm from '@/features/wizard/StepLeadForm';
 import { analyzeKaspi, submitLead } from '@/shared/lib/onboardingClient';
-import { usePolling } from '@/shared/hooks/usePolling';
-import { ANALYSIS_POLL_INTERVAL_MS } from '@/shared/constants/app';
+
 import s from './AiProfitAnalyzerPage.module.css';
 
 const stepTransition = {
@@ -73,23 +72,6 @@ export default function AiProfitAnalyzerPage() {
       runAnalysis();
     }
   }, [step, runAnalysis]);
-
-  const isRefreshingRef = useRef(false);
-
-  const refreshAnalysis = useCallback(async () => {
-    if (!productUrl || !shopName || !analysis || isRefreshingRef.current) return;
-    isRefreshingRef.current = true;
-    try {
-      const result = await analyzeKaspi({ productUrl, shopName });
-      setAnalysis(result);
-    } catch {
-      /* keep last successful data */
-    } finally {
-      isRefreshingRef.current = false;
-    }
-  }, [productUrl, shopName, analysis]);
-
-  usePolling(refreshAnalysis, ANALYSIS_POLL_INTERVAL_MS, step === 'analysis' && analysis !== null);
 
   const handleGoLead = () => setStep('lead');
 
