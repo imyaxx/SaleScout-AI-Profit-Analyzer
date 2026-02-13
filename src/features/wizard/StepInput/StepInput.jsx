@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Search, Store, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import FormField, { inputClassName } from '@/shared/ui/FormField';
+import FormField, { inputClassName } from '@/shared/ui/FormField/FormField';
 import fieldStyles from '@/shared/ui/FormField/FormField.module.css';
 import s from './StepInput.module.css';
 

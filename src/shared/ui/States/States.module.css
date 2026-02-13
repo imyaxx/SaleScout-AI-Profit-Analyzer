@@ -2,37 +2,37 @@
 .loadingRoot {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem 0;
+  gap: 2rem;
+  padding: 2rem 0;
   animation: pulse 2s infinite;
 }
 
 .skeletonGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 .skeletonCard {
-  height: 6rem;
+  height: 8rem;
   background: #e5e7eb;
   border-radius: 1.25rem;
 }
 
 .skeletonTwoCol {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
 .skeletonHalf {
-  height: 12rem;
+  height: 16rem;
   background: #e5e7eb;
   border-radius: 1.25rem;
 }
 
 .skeletonFull {
-  height: 16rem;
+  height: 24rem;
   background: #e5e7eb;
   border-radius: 1.25rem;
 }
@@ -43,7 +43,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1rem;
+  padding: 5rem 1rem;
   text-align: center;
 }
 
@@ -87,40 +87,6 @@
 }
 .retryBtn:hover {
   background: #1d4ed8;
-}
-
-@media (min-width: 640px) {
-  .loadingRoot {
-    gap: 2rem;
-    padding: 2rem 0;
-  }
-  .skeletonGrid {
-    gap: 1.5rem;
-  }
-  .skeletonCard {
-    height: 8rem;
-  }
-  .skeletonTwoCol {
-    gap: 2rem;
-  }
-  .skeletonHalf {
-    height: 16rem;
-  }
-  .skeletonFull {
-    height: 24rem;
-  }
-  .errorRoot {
-    padding: 5rem 1rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .skeletonGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .skeletonTwoCol {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 @keyframes pulse {

@@ -4,11 +4,14 @@
   border-radius: 1.5rem;
   border: 1px solid #f3f4f6;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  padding: 1rem;
+  padding: 0.25rem 1.5rem 1rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ── Nav row (back + date) ── */
@@ -17,7 +20,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 0;
+  margin-top: 0.5rem;
   margin-bottom: 0.25rem;
 }
 
@@ -29,20 +32,20 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
   border-radius: 8px;
   transition: color 0.2s;
 }
 .btnBack svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 .btnBack:hover {
   color: #2563eb;
 }
 
 .dateLabel {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #9ca3af;
 }
@@ -51,8 +54,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  margin-bottom: 0.375rem;
+  gap: 0.5rem;
+  margin-top: -1.5rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 
@@ -71,14 +75,14 @@
 }
 
 .kicker {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   text-transform: uppercase;
   font-weight: 600;
   color: #9ca3af;
 }
 
 .title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
   margin-top: 0.125rem;
@@ -88,16 +92,19 @@
 .phoneWrap {
   position: relative;
   margin: 0 auto;
-  width: 100%;
-  max-width: 165px;
-  display: flex;
-  align-items: center;
+  width: clamp(240px, 20vw, 310px);
+  max-width: none;
+  max-height: 100%;
+  display: grid;
+  place-items: start center;
   overflow: hidden;
 }
 
 .phoneBg {
+  max-height: 100%;
   width: 100%;
   height: auto;
+  object-fit: contain;
   user-select: none;
   pointer-events: none;
 }
@@ -127,7 +134,7 @@
 .listScroll {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 0.125rem;
   overflow-x: hidden;
   overflow-y: auto;
   flex: 1;
@@ -140,7 +147,8 @@
 }
 
 .sellerRow {
-  padding: 1px 2px;
+  padding-block: 0.378rem;
+  padding-inline: 0.525rem;
   border-radius: 3px;
   border: 1px solid #f3f4f6;
   background: rgba(255, 255, 255, 0.9);
@@ -169,12 +177,12 @@
 }
 
 .sellerName {
-  font-size: 4px;
+  font-size: 11.34px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.25;
+  line-height: 1.16;
   color: #111827;
 }
 
@@ -183,17 +191,20 @@
 }
 
 .sellerSubtitle {
-  font-size: 3.5px;
+  font-size: 9.45px;
   color: #ef4444;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.25;
+  line-height: 1.12;
 }
 
 .selectBtn {
-  padding: 0 1px;
-  font-size: 3.5px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  font-size: 9.03px;
   font-weight: 500;
   border-radius: 0.375rem;
   background: #3b82f6;
@@ -206,7 +217,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 0;
+  margin-top: 1px;
 }
 
 .metaLeft {
@@ -220,12 +231,12 @@
   display: flex;
   align-items: center;
   gap: 1px;
-  font-size: 3.5px;
+  font-size: 10.08px;
   color: #6b7280;
   font-weight: 500;
   background: #f3f4f6;
   border-radius: 2px;
-  padding: 0 1.5px;
+  padding: 0 2px;
 }
 
 .starIcon {
@@ -234,12 +245,12 @@
 }
 
 .reviewCount {
-  font-size: 3.5px;
+  font-size: 10.08px;
   color: #9ca3af;
 }
 
 .price {
-  font-size: 4px;
+  font-size: 11.34px;
   font-weight: 700;
   white-space: nowrap;
   color: #111827;
@@ -250,264 +261,4 @@
 
 .priceHighlighted {
   color: #dc2626;
-}
-
-/* ── Mobile ── */
-@media (max-width: 480px) {
-  .root {
-    padding: 0.75rem;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-  }
-  .headerRow {
-    margin-bottom: 0.5rem;
-    align-items: flex-start;
-  }
-  .logoWrap {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-  .title {
-    font-size: 13px;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .phoneWrap {
-    max-width: 155px;
-  }
-  .listScroll {
-    gap: 1px;
-  }
-  .sellerRow {
-    padding: 0.19rem 0.315rem;
-  }
-  .sellerName {
-    font-size: 7.56px;
-  }
-  .sellerSubtitle {
-    font-size: 5.67px;
-  }
-  .selectBtn {
-    padding: 0.63px 0.19rem;
-    font-size: 5.67px;
-  }
-  .metaRow {
-    margin-top: 1px;
-  }
-  .ratingBadge {
-    font-size: 5.67px;
-  }
-  .reviewCount {
-    font-size: 5.67px;
-  }
-  .price {
-    font-size: 7.56px;
-  }
-}
-
-/* ── Responsive ── */
-@media (min-width: 640px) {
-  .root {
-    padding: 2rem;
-  }
-  .headerRow {
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .logoWrap {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
-  .title {
-    font-size: 1.25rem;
-  }
-  .phoneWrap {
-    max-width: 300px;
-  }
-  .listScroll {
-    gap: 0.126rem;
-  }
-  .sellerRow {
-    padding: 0.756rem 0.504rem;
-  }
-  .metaRow {
-    margin-top: 2.5px;
-  }
-  .sellerName {
-    font-size: 10.08px;
-  }
-  .sellerSubtitle {
-    font-size: 8.82px;
-  }
-  .selectBtn {
-    padding: 1px 0.375rem;
-    font-size: 8.19px;
-  }
-  .ratingBadge {
-    gap: 2px;
-    font-size: 8.82px;
-  }
-  .reviewCount {
-    font-size: 8.82px;
-  }
-  .price {
-    font-size: 10.08px;
-  }
-}
-
-@media (min-width: 768px) {
-  .root {
-    padding: 2.5rem;
-  }
-  .phoneWrap {
-    max-width: 320px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .root {
-    padding: 0.25rem 1.5rem 1rem;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-  .headerRow {
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
-  }
-  .logoWrap {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  .phoneWrap {
-    width: clamp(240px, 20vw, 310px);
-    max-width: none;
-    max-height: 100%;
-    display: grid;
-    place-items: start center;
-  }
-  .phoneBg {
-    max-height: 100%;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-}
-
-/* ── Tablet 481-1023px: compact mockup without desktop squeeze ── */
-@media (min-width: 481px) and (max-width: 1023px) {
-  .root {
-    padding: 0.75rem 1rem 1rem;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-  .headerRow {
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
-  }
-  .logoWrap {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  .phoneWrap {
-    width: clamp(210px, 38vw, 300px);
-    max-width: none;
-    max-height: 100%;
-    display: grid;
-    place-items: start center;
-  }
-  .phoneBg {
-    max-height: 100%;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-}
-
-/* ── Tablet/iPad 768-1199px: MAX vertical compaction (keep card widths) ── */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .phoneWrap {
-    transform: scaleY(0.99);
-    transform-origin: top center;
-  }
-
-  .listContainer {
-    top: 30%;
-    bottom: 13.8%;
-  }
-
-  .listScroll {
-    gap: 0.125rem;
-  }
-
-  .sellerRow {
-    padding-block: 0.378rem;
-    padding-inline: 0.525rem;
-  }
-
-  .sellerName {
-    font-size: 11.34px;
-    line-height: 1.16;
-  }
-
-  .sellerSubtitle {
-    font-size: 9.45px;
-    line-height: 1.12;
-  }
-
-  .selectBtn {
-    font-size: 9.03px;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 0.375rem;
-    padding-right: 0.375rem;
-  }
-
-  .ratingBadge {
-    font-size: 10.08px;
-    gap: 1px;
-    padding: 0 2px;
-  }
-
-  .reviewCount {
-    font-size: 10.08px;
-  }
-
-  .price {
-    font-size: 11.34px;
-  }
-
-  .metaRow {
-    margin-top: 1px;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 767px) {
-  .sellerRow {
-    padding-block: 0.441rem;
-    padding-inline: 0.525rem;
-  }
-
-  .sellerName {
-    font-size: 10.71px;
-    line-height: 1.14;
-  }
-
-  .sellerSubtitle {
-    font-size: 9.24px;
-    line-height: 1.1;
-  }
-
-  .price {
-    font-size: 10.71px;
-  }
-
-  .metaRow {
-    margin-top: 1px;
-  }
 }

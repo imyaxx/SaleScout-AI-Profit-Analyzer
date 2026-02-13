@@ -1,11 +1,11 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .label {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: #374151;
   margin-left: 0.25rem;
@@ -24,11 +24,11 @@
 /* ── Input base ── */
 .input {
   width: 100%;
-  padding: 0.625rem 0.75rem 0.625rem 2.5rem;
+  padding: 0.875rem 1rem 0.875rem 3rem;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 1.25rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-family: 'Inter', sans-serif;
   outline: none;
   transition: all 0.2s;
@@ -39,6 +39,10 @@
   box-shadow: 0 0 0 4px #eff6ff;
 }
 
+.input:focus-visible {
+  outline: none;
+}
+
 .inputError {
   border-color: #fca5a5;
   box-shadow: 0 0 0 2px #fef2f2;
@@ -47,7 +51,7 @@
 /* ── Icon ── */
 .icon {
   position: absolute;
-  left: 0.75rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
@@ -55,33 +59,7 @@
 
 .iconTextarea {
   position: absolute;
-  left: 0.75rem;
-  top: 0.75rem;
+  left: 1rem;
+  top: 1rem;
   color: #9ca3af;
-}
-
-@media (max-width: 480px) {
-  .input {
-    font-size: 16px;
-  }
-}
-
-@media (min-width: 640px) {
-  .wrapper {
-    gap: 0.5rem;
-  }
-  .label {
-    font-size: 0.875rem;
-  }
-  .input {
-    padding: 0.875rem 1rem 0.875rem 3rem;
-    font-size: 1rem;
-  }
-  .icon {
-    left: 1rem;
-  }
-  .iconTextarea {
-    left: 1rem;
-    top: 1rem;
-  }
 }

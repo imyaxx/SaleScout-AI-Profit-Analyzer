@@ -1,4 +1,4 @@
-import ProfitAnalyzerPage from '@/pages/ProfitAnalyzerPage';
+import ProfitAnalyzerPage from '@/pages/ProfitAnalyzerPage/ProfitAnalyzerPage';
 import LanguageMenu from '@/shared/ui/LanguageMenu/LanguageMenu';
 import s from './App.module.css';
 

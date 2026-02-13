@@ -8,7 +8,7 @@
   flex: 1;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 2.5rem;
+  padding: 4rem 1rem;
   width: 100%;
 }
 
@@ -24,97 +24,30 @@
   color: #9ca3af;
 }
 
-/* Mobile analysis step: lock to viewport, scroll inside content */
-@media (max-width: 480px) {
-  .rootAnalysis {
-    min-height: 0;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
-  }
-  .rootAnalysis .content {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0.75rem 0.75rem 0;
-    min-height: 0;
-  }
-  .rootAnalysis .footer {
-    display: none;
-  }
+/* Analysis step: lock to viewport */
+.rootAnalysis {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  --sticky-bottom: 20px;
+  --sticky-gap: 8px;
 }
 
-@media (min-width: 640px) {
-  .content {
-    padding: 2.5rem 1rem;
-  }
+.rootAnalysis .content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 0;
+  padding-bottom: calc(
+    var(--sticky-h, 140px) + var(--sticky-bottom, 20px) + var(--sticky-gap, 8px)
+  );
 }
 
-@media (min-width: 768px) {
-  .content {
-    padding: 4rem 1rem;
-  }
-}
-
-/* Tablet analysis step: lock to viewport + reserve space for sticky */
-@media (min-width: 481px) and (max-width: 1023px) {
-  .rootAnalysis {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
-    --sticky-bottom: 14px;
-    --sticky-gap: 10px;
-  }
-  .rootAnalysis .content {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    padding-top: 0;
-    padding-bottom: calc(
-      var(--sticky-h, 140px) + var(--sticky-bottom, 20px) + var(--sticky-gap, 8px)
-    );
-  }
-  .rootAnalysis .footer {
-    display: none;
-  }
-}
-
-/* Desktop analysis step: lock to viewport, no scroll */
-@media (min-width: 1024px) {
-  .rootAnalysis {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
-    --sticky-bottom: 20px;
-    --sticky-gap: 8px;
-  }
-  .rootAnalysis .content {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    padding-top: 0;
-    padding-bottom: calc(
-      var(--sticky-h, 140px) + var(--sticky-bottom, 20px) + var(--sticky-gap, 8px)
-    );
-  }
-  .rootAnalysis .footer {
-    display: none;
-  }
-}
-
-@media (min-width: 481px) {
-  .rootAnalysis .content {
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
+.rootAnalysis .footer {
+  display: none;
 }

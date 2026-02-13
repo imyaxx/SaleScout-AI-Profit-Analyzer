@@ -22,6 +22,7 @@ export default function StepProgress({ current }) {
               <Fragment key={step.id}>
                 <div className={s.stepGroup}>
                   <div
+                    data-step-id={step.id}
                     className={cn(
                       s.circle,
                       isCompleted && s.circleCompleted,

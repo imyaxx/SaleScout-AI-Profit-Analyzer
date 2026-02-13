@@ -1,11 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { LoadingState, ErrorState } from '@/shared/ui/States';
-import ErrorBoundary from '@/shared/ui/ErrorBoundary';
-import PositionRanking from '@/features/analysis/PositionRanking';
-import StickyResult from '@/features/analysis/StickyResult';
+import { LoadingState, ErrorState } from '@/shared/ui/States/States';
+import ErrorBoundary from '@/shared/ui/ErrorBoundary/ErrorBoundary';
+import PositionRanking from '@/features/analysis/PositionRanking/PositionRanking';
+import StickyResult from '@/features/analysis/StickyResult/StickyResult';
 import { buildMiniRating, computeSimulatedUser } from '@/shared/lib/miniSellerRanking';
 import { formatMoney } from '@/shared/lib/utils';
 import { DEMO_ANALYSIS_DATA } from '@/shared/constants/demo';
@@ -73,29 +73,6 @@ const normalizeShopKey = (value) =>
     .replace(/\s+/g, ' ')
     .trim();
 
-/* ── Custom smooth scroll (rAF-based, ~320ms, easeOutCubic) ── */
-function smoothScrollTo(element, duration = 320) {
-  if (!element) return;
-  const scrollMargin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
-  const targetY = element.getBoundingClientRect().top + window.scrollY - scrollMargin;
-  const startY = window.scrollY;
-  const diff = targetY - startY;
-  if (Math.abs(diff) < 2) return;
-
-  let start = null;
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-
-  function step(timestamp) {
-    if (!start) start = timestamp;
-    const elapsed = timestamp - start;
-    const progress = Math.min(elapsed / duration, 1);
-    window.scrollTo(0, startY + diff * easeOutCubic(progress));
-    if (progress < 1) requestAnimationFrame(step);
-  }
-
-  requestAnimationFrame(step);
-}
-
 export default function StepAnalysis({
   analysis,
   isLoading,
@@ -115,14 +92,11 @@ export default function StepAnalysis({
   const viewState = isLoading ? 'loading' : error ? 'error' : analysis ? 'success' : 'idle';
   const effectiveAnalysis = analysis ?? DEMO_ANALYSIS_DATA;
 
-  const anchorRef = useRef(null);
   const resultRef = useRef(null);
   const stickyRef = useRef(null);
-  const shouldAutoScrollRef = useRef(false);
 
-  /* ── Desktop: measure sticky height → set --sticky-h on page root ── */
+  /* ── Measure sticky height → set --sticky-h on page root ── */
   useLayoutEffect(() => {
-    const mq = window.matchMedia('(min-width: 481px)');
     let ro = null;
 
     const measure = () => {
@@ -130,40 +104,21 @@ export default function StepAnalysis({
       pageRootRef.current?.style.setProperty('--sticky-h', `${h}px`);
     };
 
-    const enable = () => {
-      measure();
-      requestAnimationFrame(measure);
-      if (stickyRef.current) {
-        ro = new ResizeObserver(measure);
-        ro.observe(stickyRef.current);
-      }
-    };
-
-    const disable = () => {
-      ro?.disconnect();
-      ro = null;
-      pageRootRef.current?.style.removeProperty('--sticky-h');
-    };
-
-    const handleChange = (e) => {
-      if (e.matches) enable();
-      else disable();
-    };
-
-    if (mq.matches) enable();
-    mq.addEventListener('change', handleChange);
+    measure();
+    requestAnimationFrame(measure);
+    if (stickyRef.current) {
+      ro = new ResizeObserver(measure);
+      ro.observe(stickyRef.current);
+    }
 
     return () => {
-      mq.removeEventListener('change', handleChange);
-      disable();
+      ro?.disconnect();
+      pageRootRef.current?.style.removeProperty('--sticky-h');
     };
   }, [pageRootRef]);
 
-  /* ── iOS mobile: fully block zoom (pinch + double-tap) on analysis ── */
+  /* ── Block zoom (ctrl/cmd + wheel) on analysis ── */
   useLayoutEffect(() => {
-    if (window.innerWidth > 480) return;
-
-    // 1) Viewport meta lock
     const meta = document.querySelector('meta[name="viewport"]');
     const originalContent = meta?.getAttribute('content') ?? '';
     meta?.setAttribute(
@@ -171,58 +126,6 @@ export default function StepAnalysis({
       'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
     );
 
-    // 2) Block pinch-zoom via gesture events (Safari-specific)
-    const prevent = (e) => e.preventDefault();
-    document.addEventListener('gesturestart', prevent, { passive: false });
-    document.addEventListener('gesturechange', prevent, { passive: false });
-    document.addEventListener('gestureend', prevent, { passive: false });
-
-    // 3) Block double-tap zoom via touchend timing
-    let lastTap = 0;
-    const blockDoubleTap = (e) => {
-      const now = Date.now();
-      if (now - lastTap < 300) e.preventDefault();
-      lastTap = now;
-    };
-    document.addEventListener('touchend', blockDoubleTap, { passive: false });
-
-    return () => {
-      meta?.setAttribute('content', originalContent);
-      document.removeEventListener('gesturestart', prevent);
-      document.removeEventListener('gesturechange', prevent);
-      document.removeEventListener('gestureend', prevent);
-      document.removeEventListener('touchend', blockDoubleTap);
-    };
-  }, []);
-
-  /* ── Desktop/tablet: block zoom (pinch + double-tap + ctrl/cmd wheel) on analysis ── */
-  useLayoutEffect(() => {
-    if (window.innerWidth < 481) return;
-
-    // 1) Viewport meta lock
-    const meta = document.querySelector('meta[name="viewport"]');
-    const originalContent = meta?.getAttribute('content') ?? '';
-    meta?.setAttribute(
-      'content',
-      'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
-    );
-
-    // 2) Block pinch-zoom via gesture events (Safari-specific)
-    const prevent = (e) => e.preventDefault();
-    document.addEventListener('gesturestart', prevent, { passive: false });
-    document.addEventListener('gesturechange', prevent, { passive: false });
-    document.addEventListener('gestureend', prevent, { passive: false });
-
-    // 3) Block double-tap zoom via touchend timing
-    let lastTap = 0;
-    const blockDoubleTap = (e) => {
-      const now = Date.now();
-      if (now - lastTap < 300) e.preventDefault();
-      lastTap = now;
-    };
-    document.addEventListener('touchend', blockDoubleTap, { passive: false });
-
-    // 4) Block ctrl/cmd + wheel zoom (desktop)
     const blockZoomWheel = (e) => {
       if (e.ctrlKey || e.metaKey) e.preventDefault();
     };
@@ -230,69 +133,9 @@ export default function StepAnalysis({
 
     return () => {
       meta?.setAttribute('content', originalContent);
-      document.removeEventListener('gesturestart', prevent);
-      document.removeEventListener('gesturechange', prevent);
-      document.removeEventListener('gestureend', prevent);
-      document.removeEventListener('touchend', blockDoubleTap);
       window.removeEventListener('wheel', blockZoomWheel);
     };
   }, []);
-
-  /* ── Auto-scroll to result when success state appears ── */
-  useEffect(() => {
-    if (viewState === 'loading') {
-      shouldAutoScrollRef.current = true;
-    }
-  }, [viewState]);
-
-  /* ── Auto-scroll to result once after entering from input step ── */
-  useEffect(() => {
-    if (viewState !== 'success' || !analysis || !shouldAutoScrollRef.current) return;
-    shouldAutoScrollRef.current = false;
-
-    let rafA = 0;
-    let rafB = 0;
-    let settleTimerA = 0;
-    let settleTimerB = 0;
-    let pendingImages = [];
-    let onImageLoad = null;
-
-    const run = () => {
-      const target = anchorRef.current ?? resultRef.current;
-      if (!target) return;
-
-      smoothScrollTo(target, 320);
-
-      const settle = () => {
-        const scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-        const targetY = target.getBoundingClientRect().top + window.scrollY - scrollMargin;
-        window.scrollTo(0, targetY);
-      };
-
-      settleTimerA = window.setTimeout(settle, 180);
-      settleTimerB = window.setTimeout(settle, 420);
-
-      pendingImages = Array.from(resultRef.current?.querySelectorAll('img') ?? []).filter(
-        (img) => !img.complete,
-      );
-      onImageLoad = () => settle();
-      pendingImages.forEach((img) => img.addEventListener('load', onImageLoad));
-    };
-
-    rafA = requestAnimationFrame(() => {
-      rafB = requestAnimationFrame(run);
-    });
-
-    return () => {
-      cancelAnimationFrame(rafA);
-      cancelAnimationFrame(rafB);
-      if (settleTimerA) window.clearTimeout(settleTimerA);
-      if (settleTimerB) window.clearTimeout(settleTimerB);
-      if (onImageLoad) {
-        pendingImages.forEach((img) => img.removeEventListener('load', onImageLoad));
-      }
-    };
-  }, [analysis, pageRootRef, viewState]);
 
   const top5Sellers = useMemo(() => {
     const offers = Array.isArray(effectiveAnalysis.offers) ? effectiveAnalysis.offers : [];
@@ -399,8 +242,6 @@ export default function StepAnalysis({
         animate="animate"
         className={s.root}
       >
-        <div ref={anchorRef} />
-
         <motion.div
           ref={resultRef}
           variants={v ?? rankingSectionVariant}

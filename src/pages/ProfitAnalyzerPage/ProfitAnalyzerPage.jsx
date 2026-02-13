@@ -2,10 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import StepProgress from '@/features/wizard/StepProgress';
-import StepWelcome from '@/features/wizard/StepWelcome';
-import StepInput from '@/features/wizard/StepInput';
-import StepAnalysis from '@/features/analysis/StepAnalysis';
+import StepProgress from '@/features/wizard/StepProgress/StepProgress';
+import StepWelcome from '@/features/wizard/StepWelcome/StepWelcome';
+import StepInput from '@/features/wizard/StepInput/StepInput';
+import StepAnalysis from '@/features/analysis/StepAnalysis/StepAnalysis';
 import { analyzeKaspi } from '@/shared/lib/onboardingClient';
 import { cn } from '@/shared/lib/utils';
 
@@ -26,6 +26,7 @@ export default function ProfitAnalyzerPage() {
   const [analysis, setAnalysis] = useState(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
+  const [progressSlot, setProgressSlot] = useState(null);
 
   const progressStep = step === 'welcome' ? 1 : step === 'analysis' ? 3 : 2;
 
@@ -64,9 +65,54 @@ export default function ProfitAnalyzerPage() {
     }
   }, [step, runAnalysis]);
 
+  useEffect(() => {
+    setProgressSlot(document.getElementById('nav-progress-slot'));
+  }, []);
+
+  useEffect(() => {
+    if (!progressSlot) return;
+
+    let rafId1 = 0;
+    let rafId2 = 0;
+
+    const alignProgressToKaspiLogo = () => {
+      const stepTwoCircle = progressSlot.querySelector('[data-step-id="2"]');
+      const kaspiLogo = document.getElementById('analysis-kaspi-logo');
+
+      if (!stepTwoCircle || !kaspiLogo) {
+        progressSlot.style.setProperty('--progress-shift-x', '0px');
+        return;
+      }
+
+      const circleRect = stepTwoCircle.getBoundingClientRect();
+      const logoRect = kaspiLogo.getBoundingClientRect();
+      const circleCenterX = circleRect.left + circleRect.width / 2;
+      const logoCenterX = logoRect.left + logoRect.width / 2;
+      const shiftX = Math.round(logoCenterX - circleCenterX);
+
+      progressSlot.style.setProperty('--progress-shift-x', `${shiftX}px`);
+    };
+
+    const scheduleAlignment = () => {
+      cancelAnimationFrame(rafId1);
+      cancelAnimationFrame(rafId2);
+      rafId1 = requestAnimationFrame(() => {
+        rafId2 = requestAnimationFrame(alignProgressToKaspiLogo);
+      });
+    };
+
+    scheduleAlignment();
+    window.addEventListener('resize', scheduleAlignment);
+
+    return () => {
+      window.removeEventListener('resize', scheduleAlignment);
+      cancelAnimationFrame(rafId1);
+      cancelAnimationFrame(rafId2);
+    };
+  }, [progressSlot, step, analysis, analysisLoading, analysisError]);
+
   const pageRootRef = useRef(null);
   const contentRef = useRef(null);
-  const progressSlot = document.getElementById('nav-progress-slot');
 
   return (
     <div ref={pageRootRef} className={cn(s.root, step === 'analysis' && s.rootAnalysis)}>

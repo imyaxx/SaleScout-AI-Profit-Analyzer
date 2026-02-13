@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import i18next from 'i18next';
-import { ErrorState } from '@/shared/ui/States';
+import { ErrorState } from '@/shared/ui/States/States';
 
 export default class ErrorBoundary extends Component {
   state = { hasError: false, message: '' };

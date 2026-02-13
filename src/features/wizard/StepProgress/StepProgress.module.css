@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
   border: 1px solid #e5e7eb;
   background: #fff;
@@ -64,7 +64,7 @@
 
 .connectorWrap {
   flex: 1;
-  margin: 0 0.375rem;
+  margin: 0 0.625rem;
 }
 
 .connector {
@@ -76,26 +76,4 @@
 
 .connectorCompleted {
   background: #22c55e;
-}
-
-@media (min-width: 640px) {
-  .circle {
-    width: 2.25rem;
-    height: 2.25rem;
-    font-size: 0.875rem;
-  }
-  .connectorWrap {
-    margin: 0 0.75rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .circle {
-    width: 2rem;
-    height: 2rem;
-    font-size: 0.875rem;
-  }
-  .connectorWrap {
-    margin: 0 0.625rem;
-  }
 }

@@ -20,22 +20,6 @@ const SHUFFLE_STEP_MS = 3000; // how often a competitor changes price
 const SHUFFLE_START_DELAY_MS = 1500; // pause before shuffle begins after jump
 const PRICE_VARIATION_PCT = 0.02; // ±2% price swing for competitors
 
-function useIsMobileViewport() {
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(max-width: 480px)').matches : false,
-  );
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-    const mq = window.matchMedia('(max-width: 480px)');
-    const onChange = (event) => setIsMobile(event.matches);
-    setIsMobile(mq.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
-
-  return isMobile;
-}
 
 function pluralizeReviews(count, lang) {
   if (lang === 'en') return count === 1 ? 'review' : 'reviews';
@@ -222,8 +206,7 @@ function useRankingAnimation(renderList, reduceMotion) {
 export default function PositionRanking({ renderList, onBack, formattedDate }) {
   const { t, i18n } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
-  const isMobileViewport = useIsMobileViewport();
-  const reduceMotion = prefersReducedMotion && isMobileViewport;
+  const reduceMotion = prefersReducedMotion;
   const animatedList = useRankingAnimation(renderList, reduceMotion);
 
   return (
@@ -235,7 +218,7 @@ export default function PositionRanking({ renderList, onBack, formattedDate }) {
         <span className={s.dateLabel}>{formattedDate}</span>
       </div>
       <div className={s.headerRow}>
-        <div className={s.logoWrap}>
+        <div id="analysis-kaspi-logo" className={s.logoWrap}>
           <img src={kaspiLogo} alt="Kaspi" className={s.logoImg} />
         </div>
         <h3 className={s.title}>{t('analysis.ranking.title')}</h3>
