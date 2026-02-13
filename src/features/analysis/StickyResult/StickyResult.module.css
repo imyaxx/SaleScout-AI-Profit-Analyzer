@@ -241,9 +241,11 @@
 
 .mPriceLabel {
   display: block;
-  font-size: 8px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.012em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   margin-bottom: 1px;
   line-height: 1.2;
 }
@@ -275,9 +277,11 @@
 }
 
 .mDiffLabel {
-  font-size: 9px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.012em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
 }
 
 .mDiffValue {
@@ -401,11 +405,13 @@
 
 .dPriceLabel {
   display: block;
-  font-size: 9px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1px;
-  line-height: 1.2;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.014em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  margin-bottom: 2px;
+  line-height: 1.15;
 }
 
 .dPriceValue {
@@ -434,11 +440,13 @@
 
 .dDiffLabel {
   display: block;
-  font-size: 9px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1px;
-  line-height: 1.2;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.014em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  margin-bottom: 2px;
+  line-height: 1.15;
 }
 
 .dDiffValue {
@@ -513,12 +521,33 @@
   justify-content: center;
   gap: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s;
+  transition:
+    background 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .dCtaBtn svg {
   flex-shrink: 0;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dCtaBtn:hover {
+    background: linear-gradient(135deg, #fff8f6 0%, #ffebe6 100%);
+    color: #d53725;
+    box-shadow:
+      0 8px 18px rgba(113, 28, 20, 0.24),
+      0 0 0 1px rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px) scale(1.015);
+  }
+
+  .dCtaBtn:hover svg {
+    transform: translateX(3px);
+  }
 }
 
 .dCtaBtn:active {
   background: rgba(255, 255, 255, 0.9);
+  transform: translateY(0) scale(1);
 }
