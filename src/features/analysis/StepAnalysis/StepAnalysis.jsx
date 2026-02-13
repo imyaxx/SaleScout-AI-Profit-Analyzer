@@ -399,24 +399,6 @@ export default function StepAnalysis({
         animate="animate"
         className={s.root}
       >
-        <div className={s.headerRow}>
-          <button onClick={onBack} className={s.btnBack}>
-            <ArrowLeft size={16} />
-            <span className={s.btnBackLabel}>{t('input.back')}</span>
-          </button>
-          <motion.h2 variants={v ?? headerTitleVariant} className={s.title}>
-            {t('analysis.title')}
-            <span className={s.dateLabel}>{t('analysis.date', { date: formattedDate })}</span>
-          </motion.h2>
-          <span className={s.dateLabelDesktop}>{t('analysis.date', { date: formattedDate })}</span>
-          <motion.div variants={v ?? headerActionsVariant} className={s.headerActions}>
-            <button onClick={handleTrialCta} className={s.ctaBtn}>
-              {t('analysis.cta')}
-              <ArrowRight size={16} />
-            </button>
-          </motion.div>
-        </div>
-
         <div ref={anchorRef} />
 
         <motion.div
@@ -424,7 +406,7 @@ export default function StepAnalysis({
           variants={v ?? rankingSectionVariant}
           className={s.rankingCenter}
         >
-          <PositionRanking renderList={rankingRenderList} />
+          <PositionRanking renderList={rankingRenderList} onBack={onBack} formattedDate={t('analysis.date', { date: formattedDate })} />
         </motion.div>
 
         {showSticky && <div className={s.bottomSpacer} />}

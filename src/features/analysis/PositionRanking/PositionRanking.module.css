@@ -1,9 +1,9 @@
 /* ── Root ── */
 .root {
-  background: var(--color-surface-white);
-  border-radius: var(--radius-3xl);
-  border: 1px solid var(--color-gray-100);
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 1rem;
   width: 100%;
   display: flex;
@@ -11,17 +11,55 @@
   align-items: center;
 }
 
-.headerRow {
+/* ── Nav row (back + date) ── */
+.navRow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.btnBack {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: color 0.2s;
+}
+.btnBack svg {
+  width: 24px;
+  height: 24px;
+}
+.btnBack:hover {
+  color: #2563eb;
+}
+
+.dateLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.375rem;
+  text-align: center;
 }
 
 .logoWrap {
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: var(--radius-2xl);
+  border-radius: 1.25rem;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -33,16 +71,16 @@
 }
 
 .kicker {
-  font-size: var(--font-xs);
+  font-size: 0.75rem;
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--color-gray-400);
+  color: #9ca3af;
 }
 
 .title {
-  font-size: var(--font-base);
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--color-gray-900);
+  color: #111827;
   margin-top: 0.125rem;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
 }
@@ -51,7 +89,7 @@
   position: relative;
   margin: 0 auto;
   width: 100%;
-  max-width: 195px;
+  max-width: 165px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -89,7 +127,7 @@
 .listScroll {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 1px;
   overflow-x: hidden;
   overflow-y: auto;
   flex: 1;
@@ -102,9 +140,9 @@
 }
 
 .sellerRow {
-  padding: 0.3rem 0.375rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-gray-100);
+  padding: 1px 2px;
+  border-radius: 3px;
+  border: 1px solid #f3f4f6;
   background: rgba(255, 255, 255, 0.9);
   flex-shrink: 0;
   width: 100%;
@@ -114,7 +152,7 @@
 }
 
 .sellerRowHighlighted {
-  border-color: var(--color-red-100);
+  border-color: #fee2e2;
   background: rgba(254, 242, 242, 0.8);
 }
 
@@ -131,22 +169,22 @@
 }
 
 .sellerName {
-  font-size: 8px;
+  font-size: 4px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.25;
-  color: var(--color-gray-900);
+  color: #111827;
 }
 
 .sellerNameHighlighted {
-  color: var(--color-red-600);
+  color: #dc2626;
 }
 
 .sellerSubtitle {
-  font-size: 6.5px;
-  color: var(--color-red-500);
+  font-size: 3.5px;
+  color: #ef4444;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -154,11 +192,11 @@
 }
 
 .selectBtn {
-  padding: 1.5px 0.3rem;
-  font-size: 6.5px;
+  padding: 0 1px;
+  font-size: 3.5px;
   font-weight: 500;
-  border-radius: var(--radius-sm);
-  background: var(--color-brand-500);
+  border-radius: 0.375rem;
+  background: #3b82f6;
   color: #fff;
   white-space: nowrap;
   flex-shrink: 0;
@@ -168,13 +206,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1.5px;
+  margin-top: 0;
 }
 
 .metaLeft {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 1px;
   overflow: hidden;
 }
 
@@ -182,36 +220,36 @@
   display: flex;
   align-items: center;
   gap: 1px;
-  font-size: 6.5px;
-  color: var(--color-gray-500);
+  font-size: 3.5px;
+  color: #6b7280;
   font-weight: 500;
-  background: var(--color-gray-100);
-  border-radius: var(--radius-sm);
-  padding: 0.5px 2.5px;
+  background: #f3f4f6;
+  border-radius: 2px;
+  padding: 0 1.5px;
 }
 
 .starIcon {
-  fill: var(--color-green-500);
-  color: var(--color-green-500);
+  fill: #22c55e;
+  color: #22c55e;
 }
 
 .reviewCount {
-  font-size: 6.5px;
-  color: var(--color-gray-400);
+  font-size: 3.5px;
+  color: #9ca3af;
 }
 
 .price {
-  font-size: 8px;
+  font-size: 4px;
   font-weight: 700;
   white-space: nowrap;
-  color: var(--color-gray-900);
+  color: #111827;
   flex-shrink: 0;
   overflow: visible;
   min-width: fit-content;
 }
 
 .priceHighlighted {
-  color: var(--color-red-600);
+  color: #dc2626;
 }
 
 /* ── Mobile ── */
@@ -239,35 +277,35 @@
     overflow: hidden;
   }
   .phoneWrap {
-    max-width: 180px;
+    max-width: 155px;
   }
   .listScroll {
     gap: 1px;
   }
   .sellerRow {
-    padding: 0.25rem 0.3rem;
+    padding: 0.19rem 0.315rem;
   }
   .sellerName {
-    font-size: 7px;
+    font-size: 7.56px;
   }
   .sellerSubtitle {
-    font-size: 5.5px;
+    font-size: 5.67px;
   }
   .selectBtn {
-    padding: 1px 0.2rem;
-    font-size: 5.5px;
+    padding: 0.63px 0.19rem;
+    font-size: 5.67px;
   }
   .metaRow {
     margin-top: 1px;
   }
   .ratingBadge {
-    font-size: 5.5px;
+    font-size: 5.67px;
   }
   .reviewCount {
-    font-size: 5.5px;
+    font-size: 5.67px;
   }
   .price {
-    font-size: 7px;
+    font-size: 7.56px;
   }
 }
 
@@ -285,39 +323,39 @@
     height: 3.5rem;
   }
   .title {
-    font-size: var(--font-xl);
+    font-size: 1.25rem;
   }
   .phoneWrap {
-    max-width: 340px;
+    max-width: 300px;
   }
   .listScroll {
-    gap: 0.1875rem;
+    gap: 0.126rem;
   }
   .sellerRow {
-    padding: 1rem 0.5rem;
+    padding: 0.756rem 0.504rem;
   }
   .metaRow {
     margin-top: 2.5px;
   }
   .sellerName {
-    font-size: 10px;
+    font-size: 10.08px;
   }
   .sellerSubtitle {
-    font-size: 9px;
+    font-size: 8.82px;
   }
   .selectBtn {
     padding: 1px 0.375rem;
-    font-size: 8px;
+    font-size: 8.19px;
   }
   .ratingBadge {
     gap: 2px;
-    font-size: 9px;
+    font-size: 8.82px;
   }
   .reviewCount {
-    font-size: 9px;
+    font-size: 8.82px;
   }
   .price {
-    font-size: 10px;
+    font-size: 10.08px;
   }
 }
 
@@ -326,7 +364,7 @@
     padding: 2.5rem;
   }
   .phoneWrap {
-    max-width: 360px;
+    max-width: 320px;
   }
 }
 
@@ -346,7 +384,7 @@
     height: 2.5rem;
   }
   .phoneWrap {
-    width: clamp(280px, 22vw, 360px);
+    width: clamp(240px, 20vw, 310px);
     max-width: none;
     max-height: 100%;
     display: grid;
@@ -377,7 +415,7 @@
     height: 2.5rem;
   }
   .phoneWrap {
-    width: clamp(240px, 42vw, 340px);
+    width: clamp(210px, 38vw, 300px);
     max-width: none;
     max-height: 100%;
     display: grid;
@@ -408,22 +446,22 @@
   }
 
   .sellerRow {
-    padding-block: 0.45rem;
-    padding-inline: 0.5rem;
+    padding-block: 0.378rem;
+    padding-inline: 0.525rem;
   }
 
   .sellerName {
-    font-size: 11.5px;
+    font-size: 11.34px;
     line-height: 1.16;
   }
 
   .sellerSubtitle {
-    font-size: 9.5px;
+    font-size: 9.45px;
     line-height: 1.12;
   }
 
   .selectBtn {
-    font-size: 9.2px;
+    font-size: 9.03px;
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 0.375rem;
@@ -431,17 +469,17 @@
   }
 
   .ratingBadge {
-    font-size: 10px;
+    font-size: 10.08px;
     gap: 1px;
     padding: 0 2px;
   }
 
   .reviewCount {
-    font-size: 10px;
+    font-size: 10.08px;
   }
 
   .price {
-    font-size: 11.3px;
+    font-size: 11.34px;
   }
 
   .metaRow {
@@ -451,22 +489,22 @@
 
 @media (min-width: 481px) and (max-width: 767px) {
   .sellerRow {
-    padding-block: 0.56rem;
-    padding-inline: 0.5rem;
+    padding-block: 0.441rem;
+    padding-inline: 0.525rem;
   }
 
   .sellerName {
-    font-size: 11px;
+    font-size: 10.71px;
     line-height: 1.14;
   }
 
   .sellerSubtitle {
-    font-size: 9.3px;
+    font-size: 9.24px;
     line-height: 1.1;
   }
 
   .price {
-    font-size: 10.5px;
+    font-size: 10.71px;
   }
 
   .metaRow {

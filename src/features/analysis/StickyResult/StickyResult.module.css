@@ -9,7 +9,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(37, 99, 235, 0.1);
-  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  border-radius: 1.25rem 1.25rem 0 0;
   box-shadow:
     0 -6px 24px rgba(37, 99, 235, 0.08),
     0 -2px 8px rgba(0, 0, 0, 0.04);
@@ -34,7 +34,7 @@
 }
 
 .inner {
-  max-width: var(--container-max);
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -44,7 +44,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-gray-400);
+  color: #9ca3af;
   margin: 0 0 0.375rem;
   line-height: 1;
 }
@@ -63,7 +63,7 @@
 .divider {
   width: 1px;
   align-self: stretch;
-  background: var(--color-gray-200);
+  background: #e5e7eb;
   margin: 0 0.625rem;
   flex-shrink: 0;
 }
@@ -87,8 +87,8 @@
   flex-shrink: 0;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--color-brand-600), var(--color-indigo-600));
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
   display: flex;
   align-items: center;
@@ -101,15 +101,15 @@
 }
 
 .rankBadgeLeader {
-  background: linear-gradient(135deg, var(--color-success-500), var(--color-success-600));
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
 }
 
 /* ── Text ── */
 .storeName {
-  font-size: var(--font-xs);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-gray-900);
+  color: #111827;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -120,7 +120,7 @@
 .metaItem {
   font-size: 0.6875rem;
   font-weight: 500;
-  color: var(--color-gray-500);
+  color: #6b7280;
   line-height: 1.3;
   white-space: nowrap;
 }
@@ -128,8 +128,8 @@
 .metaDot {
   width: 3px;
   height: 3px;
-  border-radius: var(--radius-full);
-  background: var(--color-gray-300);
+  border-radius: 9999px;
+  background: #d1d5db;
   flex-shrink: 0;
 }
 
@@ -144,9 +144,9 @@
 .soloBlock .rankBadge {
   width: 2.25rem;
   height: 2.25rem;
-  font-size: var(--font-sm);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--color-success-500), var(--color-success-600));
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
 }
 
@@ -155,7 +155,7 @@
 }
 
 .soloInfo .storeName {
-  font-size: var(--font-sm);
+  font-size: 0.875rem;
 }
 
 .soloMeta {
@@ -340,7 +340,7 @@
   color: #F14432;
   font-size: 13px;
   font-weight: 700;
-  font-family: var(--font-family);
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: background 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -598,7 +598,7 @@
     border: none;
     font-size: 14px;
     font-weight: 700;
-    font-family: var(--font-family);
+    font-family: 'Inter', sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;

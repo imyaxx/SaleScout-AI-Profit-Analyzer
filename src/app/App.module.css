@@ -1,12 +1,47 @@
+/* ── Global reset & base (from globals.css) ── */
+:global(*),
+:global(*::before),
+:global(*::after) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:global(body) {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:global(*:focus-visible) {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+:global(img),
+:global(svg) {
+  display: block;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  :global(html), :global(body) {
+    overflow-x: hidden;
+  }
+}
+
+/* ── App layout ── */
 .root {
   min-height: 100vh;
-  background: var(--color-surface-bg);
+  background: #f9fafb;
   overflow-x: hidden;
 }
 
 .root ::selection {
-  background: var(--color-blue-100);
-  color: var(--color-brand-700);
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .nav {
@@ -15,11 +50,11 @@
   z-index: 50;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .navInner {
-  max-width: var(--container-max);
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1rem;
   height: 3.5rem;
@@ -37,8 +72,8 @@
 .logoIcon {
   width: 2.25rem;
   height: 2.25rem;
-  background: var(--color-brand-600);
-  border-radius: var(--radius-xl);
+  background: #2563eb;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,13 +82,13 @@
 .logoLetter {
   color: #fff;
   font-weight: 900;
-  font-size: var(--font-lg);
+  font-size: 1.125rem;
   line-height: 1;
 }
 
 .logoText {
   font-weight: 900;
-  font-size: var(--font-lg);
+  font-size: 1.125rem;
   letter-spacing: -0.025em;
   display: none;
 }
@@ -82,11 +117,11 @@
     height: 2.5rem;
   }
   .logoLetter {
-    font-size: var(--font-xl);
+    font-size: 1.25rem;
   }
   .logoText {
     display: inline;
-    font-size: var(--font-xl);
+    font-size: 1.25rem;
   }
 }
 

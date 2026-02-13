@@ -23,43 +23,43 @@
 .circle {
   width: 2rem;
   height: 2rem;
-  border-radius: var(--radius-full);
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-xs);
+  font-size: 0.75rem;
   font-weight: 700;
-  border: 1px solid var(--color-gray-200);
+  border: 1px solid #e5e7eb;
   background: #fff;
-  color: var(--color-gray-400);
+  color: #9ca3af;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .circleCompleted {
-  background: var(--color-green-500);
-  border-color: var(--color-green-500);
+  background: #22c55e;
+  border-color: #22c55e;
   color: #fff;
 }
 
 .circleActive {
-  background: var(--color-brand-600);
-  border-color: var(--color-brand-600);
+  background: #2563eb;
+  border-color: #2563eb;
   color: #fff;
 }
 
 .label {
-  font-size: var(--font-xs);
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-gray-400);
+  color: #9ca3af;
   display: none;
 }
 
 .labelCompleted {
-  color: var(--color-green-600);
+  color: #16a34a;
 }
 
 .labelActive {
-  color: var(--color-gray-900);
+  color: #111827;
 }
 
 .connectorWrap {
@@ -70,19 +70,19 @@
 .connector {
   height: 2px;
   width: 100%;
-  background: var(--color-gray-200);
+  background: #e5e7eb;
   transition: background 0.2s;
 }
 
 .connectorCompleted {
-  background: var(--color-green-500);
+  background: #22c55e;
 }
 
 @media (min-width: 640px) {
   .circle {
     width: 2.25rem;
     height: 2.25rem;
-    font-size: var(--font-sm);
+    font-size: 0.875rem;
   }
   .connectorWrap {
     margin: 0 0.75rem;
@@ -93,7 +93,7 @@
   .circle {
     width: 2rem;
     height: 2rem;
-    font-size: var(--font-sm);
+    font-size: 0.875rem;
   }
   .connectorWrap {
     margin: 0 0.625rem;

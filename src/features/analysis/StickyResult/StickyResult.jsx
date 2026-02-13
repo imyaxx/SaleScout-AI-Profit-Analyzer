@@ -174,6 +174,7 @@ const StickyResult = forwardRef(function StickyResult(
           </button>
           <p className={s.mCancelText}>{t('analysis.sticky.cancel')}</p>
         </div>
+
       </div>
     </div>
   );

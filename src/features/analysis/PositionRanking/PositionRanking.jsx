@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useSpring } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { ArrowLeft, Star } from 'lucide-react';
 import kaspiLogo from '@/assets/Logo_of_Kaspi_bank.png';
 import { useTranslation } from 'react-i18next';
 import { formatMoney, cn } from '@/shared/lib/utils';
@@ -219,7 +219,7 @@ function useRankingAnimation(renderList, reduceMotion) {
   return reduceMotion ? staticList : list;
 }
 
-export default function PositionRanking({ renderList }) {
+export default function PositionRanking({ renderList, onBack, formattedDate }) {
   const { t, i18n } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
   const isMobileViewport = useIsMobileViewport();
@@ -228,14 +228,18 @@ export default function PositionRanking({ renderList }) {
 
   return (
     <div className={s.root}>
+      <div className={s.navRow}>
+        <button onClick={onBack} className={s.btnBack}>
+          <ArrowLeft size={16} />
+        </button>
+        <span className={s.dateLabel}>{formattedDate}</span>
+      </div>
       <div className={s.headerRow}>
         <div className={s.logoWrap}>
           <img src={kaspiLogo} alt="Kaspi" className={s.logoImg} />
         </div>
-        <div>
-          <p className={s.kicker}>{t('analysis.ranking.kicker')}</p>
-          <h3 className={s.title}>{t('analysis.ranking.title')}</h3>
-        </div>
+        <h3 className={s.title}>{t('analysis.ranking.title')}</h3>
+        <p className={s.kicker}>{t('analysis.ranking.kicker')}</p>
       </div>
 
       <div className={s.phoneWrap}>
