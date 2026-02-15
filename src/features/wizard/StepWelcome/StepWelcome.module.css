@@ -67,3 +67,47 @@
 .ctaBtn:hover {
   background: #1d4ed8;
 }
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .root {
+    padding: 2rem 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    max-width: 28rem;
+  }
+
+  .badge {
+    margin-bottom: 1rem;
+  }
+
+  .ctaBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .root {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.625rem;
+  }
+
+  .subtitle {
+    font-size: 0.9375rem;
+    margin-bottom: 1.5rem;
+  }
+}

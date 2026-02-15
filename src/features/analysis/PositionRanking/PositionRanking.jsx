@@ -225,7 +225,7 @@ export default function PositionRanking({ renderList, onBack, formattedDate }) {
         <p className={s.kicker}>{t('analysis.ranking.kicker')}</p>
       </div>
 
-      <div className={s.phoneWrap}>
+      <div id="analysis-phone-wrap" className={s.phoneWrap}>
         <img src={sellersBg} alt="" className={s.phoneBg} draggable={false} />
         <div className={s.overlay}>
           <div className={s.listContainer}>

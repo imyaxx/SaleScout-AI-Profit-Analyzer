@@ -25,20 +25,31 @@ export function LoadingState() {
   );
 }
 
-export function ErrorState({ message, onRetry }) {
+export function ErrorState({ message, onRetry, variant = 'default', secondaryAction = null }) {
   const { t } = useTranslation();
+  const isBoundary = variant === 'boundary';
+  const rootClassName = isBoundary ? `${s.errorRoot} ${s.errorBoundary}` : s.errorRoot;
 
   return (
-    <motion.div {...errorFadeIn} className={s.errorRoot}>
+    <motion.div {...errorFadeIn} className={rootClassName}>
       <div className={s.errorIcon}>
-        <AlertCircle size={32} />
+        <AlertCircle size={isBoundary ? 28 : 32} />
       </div>
       <h3 className={s.errorTitle}>{t('errors.genericTitle')}</h3>
       <p className={s.errorMessage}>{message}</p>
-      <button onClick={onRetry} className={s.retryBtn}>
-        <RefreshCw size={18} />
-        {t('errors.retry')}
-      </button>
+      <div className={s.errorActions}>
+        <button type="button" onClick={onRetry} className={s.retryBtn}>
+          <RefreshCw size={18} />
+          {t('errors.retry')}
+        </button>
+
+        {secondaryAction ? (
+          <button type="button" onClick={secondaryAction.onClick} className={s.secondaryBtn}>
+            {secondaryAction.icon}
+            {secondaryAction.label}
+          </button>
+        ) : null}
+      </div>
     </motion.div>
   );
 }

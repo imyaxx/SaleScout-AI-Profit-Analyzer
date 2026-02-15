@@ -13,7 +13,7 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 18px;
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.15);
-  padding: 16px 24px;
+  padding: 12px 20px;
   will-change: transform;
 
   /* slide-up */
@@ -182,7 +182,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .mRankGroup {
@@ -227,11 +227,11 @@
 .mRow2 {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 14px;
-  padding: 8px 10px;
+  padding: 6px 8px;
 }
 
 .mPriceCol {
@@ -272,7 +272,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   padding: 0 2px;
 }
 
@@ -303,8 +303,8 @@
 
 .mCtaBtn {
   width: 100%;
-  padding: 10px;
-  min-height: 46px;
+  padding: 8px;
+  min-height: 40px;
   border: none;
   border-radius: 12px;
   background: #fff;
@@ -336,7 +336,7 @@
 .dRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: nowrap;
   min-width: 0;
   width: 100%;
@@ -359,7 +359,7 @@
 }
 
 .dYourRank {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.02em;
@@ -367,7 +367,7 @@
 }
 
 .dGoalRank {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.2;
@@ -375,9 +375,9 @@
 }
 
 .dTrialTag {
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
@@ -396,7 +396,7 @@
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 14px;
-  padding: 8px 14px;
+  padding: 6px 12px;
 }
 
 .dPriceCol {
@@ -405,7 +405,7 @@
 
 .dPriceLabel {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.92);
   letter-spacing: 0.014em;
@@ -416,7 +416,7 @@
 
 .dPriceValue {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
@@ -427,7 +427,7 @@
 
 .dPriceDivider {
   width: 1px;
-  height: 20px;
+  height: 16px;
   background: rgba(255, 255, 255, 0.18);
   justify-self: center;
   align-self: center;
@@ -440,7 +440,7 @@
 
 .dDiffLabel {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.92);
   letter-spacing: 0.014em;
@@ -451,7 +451,7 @@
 
 .dDiffValue {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #fff;
   white-space: normal;
@@ -487,7 +487,7 @@
 
 .dDiffAmount {
   flex: 0 0 auto;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   white-space: normal;
   overflow: visible;
@@ -505,14 +505,14 @@
   flex: 0 0 auto;
   min-width: clamp(124px, 14vw, 220px);
   white-space: nowrap;
-  padding: 10px 16px;
+  padding: 8px 14px;
   max-width: 320px;
-  height: 46px;
+  height: 40px;
   background: #fff;
   color: #f14432;
   border-radius: 12px;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
@@ -550,4 +550,135 @@
 .dCtaBtn:active {
   background: rgba(255, 255, 255, 0.9);
   transform: translateY(0) scale(1);
+}
+
+/* ══════════════════════════════════════════
+   MOBILE — show mobileOnly, hide desktop
+   ══════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .root {
+    width: calc(100% - 16px);
+    border-radius: 14px;
+    padding: 10px 12px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    bottom: 8px;
+  }
+
+  .rootVisible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .desktopStickyOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+}
+
+/* ══════════════════════════════════════════
+   TABLET — use desktop sticky layout, enhanced
+   ══════════════════════════════════════════ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .root {
+    padding: 18px 20px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    border-radius: 16px;
+  }
+
+  .dYourRank {
+    font-size: 14px;
+  }
+
+  .dGoalRank {
+    font-size: 12px;
+  }
+
+  .dPrices {
+    flex: 1 1 320px;
+    gap: 0 8px;
+    padding: 8px 12px;
+  }
+
+  .dCtaBtn {
+    min-width: 140px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   DESKTOP — safe-area for consistency
+   ══════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .root {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── iPad / tablet landscape only: compact but readable sticky ── */
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (any-pointer: coarse) {
+  .root {
+    width: min(920px, calc(100% - 16px));
+    border-radius: 10px;
+    padding: 5px 12px;
+    padding-bottom: calc(5px + env(safe-area-inset-bottom));
+    bottom: 14px;
+  }
+
+  .dRow {
+    gap: 8px;
+  }
+
+  .dLeft {
+    gap: 6px;
+  }
+
+  .dYourRank {
+    font-size: 12px;
+  }
+
+  .dGoalRank {
+    font-size: 10px;
+  }
+
+  .dTrialTag {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .dPrices {
+    flex: 1 1 280px;
+    gap: 0 8px;
+    padding: 4px 10px;
+    border-radius: 10px;
+  }
+
+  .dPriceLabel,
+  .dDiffLabel {
+    font-size: 9px;
+    margin-bottom: 1px;
+  }
+
+  .dPriceValue,
+  .dDiffValue,
+  .dDiffAmount {
+    font-size: 11px;
+    line-height: 1.15;
+  }
+
+  .dPriceDivider {
+    height: 14px;
+  }
+
+  .dCtaBtn {
+    min-width: 110px;
+    height: 30px;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
 }

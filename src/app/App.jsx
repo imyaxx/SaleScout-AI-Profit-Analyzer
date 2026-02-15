@@ -16,7 +16,7 @@ export default function App() {
 
           <div id="nav-progress-slot" className={s.progressSlot} />
 
-          <div className={s.langWrap}>
+          <div data-lang-wrap className={s.langWrap}>
             <LanguageMenu />
           </div>
         </div>

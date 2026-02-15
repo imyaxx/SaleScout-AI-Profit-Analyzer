@@ -71,9 +71,17 @@
   max-width: 28rem;
 }
 
+.errorActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: min(100%, 19rem);
+}
+
 .retryBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   background: #2563eb;
@@ -82,11 +90,63 @@
   border-radius: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+  width: 100%;
 }
 .retryBtn:hover {
   background: #1d4ed8;
+}
+
+.secondaryBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.5rem;
+  background: #ffffff;
+  color: #374151;
+  border: none;
+  border-radius: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+  box-shadow: 0 6px 14px rgba(17, 24, 39, 0.08);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.secondaryBtn svg {
+  transition: transform 0.2s ease;
+}
+.secondaryBtn:hover {
+  color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+.secondaryBtn:hover svg {
+  transform: translateX(-2px);
+}
+.secondaryBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #e5e7eb;
+}
+
+.secondaryBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.08);
 }
 
 @keyframes pulse {

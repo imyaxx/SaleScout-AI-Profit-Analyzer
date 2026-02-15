@@ -1,11 +1,11 @@
 .root {
-  width: 100%;
   display: flex;
   justify-content: center;
+  max-width: 100%;
 }
 
 .inner {
-  width: 100%;
+  max-width: 20rem;
 }
 
 .row {
@@ -76,4 +76,43 @@
 
 .connectorCompleted {
   background: #22c55e;
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .inner {
+    max-width: 12rem;
+  }
+
+  .circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.675rem;
+    border-width: 1px;
+  }
+
+  .connectorWrap {
+    margin: 0 0.25rem;
+  }
+
+  .connector {
+    height: 1.5px;
+  }
+}
+
+/* ── Ultra-narrow ── */
+@media (max-width: 359px) {
+  .inner {
+    max-width: 9rem;
+  }
+
+  .circle {
+    width: 1.375rem;
+    height: 1.375rem;
+    font-size: 0.625rem;
+  }
+
+  .connectorWrap {
+    margin: 0 0.1875rem;
+  }
 }

@@ -219,13 +219,15 @@ export default function StepAnalysis({
 
   if (viewState === 'error') {
     return (
-      <div className={s.errorWrap}>
-        <button onClick={onBack} className={s.btnBack}>
-          <ArrowLeft size={16} />
-          {t('input.back')}
-        </button>
-        <ErrorState message={error ?? t('analysis.error')} onRetry={onRetry} />
-      </div>
+      <ErrorState
+        message={error ?? t('analysis.error')}
+        onRetry={onRetry}
+        secondaryAction={{
+          onClick: onBack,
+          label: t('input.back'),
+          icon: <ArrowLeft size={18} />,
+        }}
+      />
     );
   }
 

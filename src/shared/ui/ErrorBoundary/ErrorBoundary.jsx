@@ -18,7 +18,7 @@ export default class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <ErrorState message={this.state.message} onRetry={this.props.onRetry} />;
+      return <ErrorState message={this.state.message} onRetry={this.props.onRetry} variant="boundary" />;
     }
     return this.props.children;
   }

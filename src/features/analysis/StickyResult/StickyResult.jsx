@@ -172,7 +172,6 @@ const StickyResult = forwardRef(function StickyResult(
           <button className={s.mCtaBtn} onClick={onCta}>
             {t('analysis.sticky.cta')}
           </button>
-          <p className={s.mCancelText}>{t('analysis.sticky.cancel')}</p>
         </div>
 
       </div>

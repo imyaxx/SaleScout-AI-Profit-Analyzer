@@ -29,20 +29,64 @@
   line-height: 1.4;
 }
 
-.btnBackDesktop {
+.btnBackDesktop,
+.btnBackMobile {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  color: #9ca3af;
-  font-weight: 500;
-  background: none;
+  min-height: 2.75rem;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  background: #ffffff;
   border: none;
+  border-radius: 0.875rem;
+  padding: 0.625rem 0.875rem;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
   cursor: pointer;
-  transition: color 0.2s;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+  box-shadow: 0 6px 14px rgba(17, 24, 39, 0.08);
   font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
-.btnBackDesktop:hover {
+
+.btnBackDesktop svg,
+.btnBackMobile svg {
+  transition: transform 0.2s ease;
+}
+
+.btnBackDesktop:hover,
+.btnBackMobile:hover {
   color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+.btnBackDesktop:hover svg,
+.btnBackMobile:hover svg {
+  transform: translateX(-2px);
+}
+
+.btnBackDesktop:focus-visible,
+.btnBackMobile:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+
+.btnBackDesktop:active,
+.btnBackMobile:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.08);
 }
 
 .grid {
@@ -85,4 +129,47 @@
 }
 .btnSubmit:active {
   transform: scale(0.95);
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .root {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.375rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .headerRow {
+    margin-bottom: 1rem;
+  }
+
+  .btnBackDesktop {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    margin-top: 1.5rem;
+  }
+
+  .btnBackMobile {
+    display: inline-flex;
+    width: 100%;
+    order: 1;
+  }
+
+  .btnSubmit {
+    width: 100%;
+  }
 }
